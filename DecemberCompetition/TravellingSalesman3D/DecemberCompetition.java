@@ -20,28 +20,25 @@ public class DecemberCompetition {
     // So for each list in the 2d list, you must try to find the shortest path between the points in that list
     public static ArrayList<ArrayList<Point>> getProblems() {
         ArrayList<ArrayList<Point>> problems = new ArrayList<ArrayList<Point>>(0);
-        File folder = new File("input/");
-        for (final File fileEntry : folder.listFiles()) {
-            if (!fileEntry.isDirectory()) {
-                try (BufferedReader br = new BufferedReader(new FileReader(fileEntry))) {
-                    ArrayList<Point> points = new ArrayList<Point>(0);
-                    int index = 0;
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        String[] components = line.split(" ");
-                        points.add(new Point(
-                                Integer.parseInt(components[0]), 
-                                Integer.parseInt(components[1]), 
-                                Integer.parseInt(components[2]), 
-                                index));
-                        index++;
-                    }
-                    problems.add(points);
-
-                } catch(Exception e) {
-                    e.printStackTrace();
-                    System.out.println("There was an error reading in your solutions. You should probably find Ben Spector, Luca Koval, or Michael Truell. They will fix this.");
+        for(int a = 0; a < 20; a++) {
+            File fileEntry = new File("input/"+(a+1)+".txt");
+            try (BufferedReader br = new BufferedReader(new FileReader(fileEntry))) {
+                ArrayList<Point> points = new ArrayList<Point>(0);
+                int index = 0;
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String[] components = line.split(" ");
+                    points.add(new Point(
+                            Integer.parseInt(components[0]), 
+                            Integer.parseInt(components[1]), 
+                            Integer.parseInt(components[2]), 
+                            index));
+                    index++;
                 }
+                problems.add(points);
+            } catch(Exception e) {
+                e.printStackTrace();
+                System.out.println("There was an error reading in your solutions. You should probably find Ben Spector, Luca Koval, or Michael Truell. They will fix this.");
             }
         }
 
@@ -77,7 +74,8 @@ public class DecemberCompetition {
         ArrayList<ArrayList<Point>> solutions = new ArrayList<ArrayList<Point>>(0);
 
         Scanner s = new Scanner(System.in);
-        System.out.print("Which Algorithm Would You Like To Use: 1 = Greedy-One, 2 = Random, 3 Greedy-Random? ");
+        System.out.println("Which Algorithm Would You Like To Use:");
+        System.out.print("1 = Greedy-One, 2 = Random, 3 Greedy-Random: ");
         int r = s.nextInt();
 
         switch (r) {
@@ -110,6 +108,8 @@ public class DecemberCompetition {
             int best2 = Integer.MAX_VALUE;
             System.out.print("Keep Going Until Smaller Than What? ");
             int r3 = s.nextInt();
+            System.out.print("Save To File Below What Value? ");
+            int saveThreshold = s.nextInt();
             while (true) {
                 for (ArrayList<Point> points : problems) {
                     solutions.add(GuessingAlgorithm.solveProblem(points));
@@ -119,19 +119,31 @@ public class DecemberCompetition {
                     newSolutions.add(GreedyAlgorithm.solveProblem(points));
                 }
                 int l = PathMeasure.evalAlgLen(newSolutions);
-                if (l < best2) {
-                    best2 = l;
-                    System.out.println("New Best Length: " + best2);
-                }
                 if (l < r3) {
                     outputSolutionsToFile("Nick Keirstead", newSolutions);
                     break;
                 }
+                if (l < best2) {
+                    best2 = l;
+                    System.out.println("New Best Length: " + best2);
+                    if (l < saveThreshold) {
+                        outputSolutionsToFile("Nick Keirstead", newSolutions);
+                    }
+                }
+
                 solutions.clear();
                 newSolutions.clear();
             }
             System.out.println("Done!");
             break;
+            case 4:
+            for (ArrayList<Point> points : problems) {
+                solutions.add(GreedyBruteAlgorithm.solveProblem(points));
+            }
+            System.out.println("New Best = " + PathMeasure.evalAlgLen(solutions));
+            outputSolutionsToFile("Nick Keirstead", solutions);
+            break;
+
             default:
             System.out.println("Invalid Algorithm Choice");
         }
