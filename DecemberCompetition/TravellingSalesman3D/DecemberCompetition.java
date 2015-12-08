@@ -75,7 +75,7 @@ public class DecemberCompetition {
 
         Scanner s = new Scanner(System.in);
         System.out.println("Which Algorithm Would You Like To Use:");
-        System.out.print("1 = Greedy-One, 2 = Random, 3 Greedy-Random: ");
+        System.out.print("1 = Greedy-One, 2 = Random, 3 Greedy-Random, 4 Greedy-Brute: ");
         int r = s.nextInt();
 
         switch (r) {
@@ -130,7 +130,6 @@ public class DecemberCompetition {
                         outputSolutionsToFile("Nick Keirstead", newSolutions);
                     }
                 }
-
                 solutions.clear();
                 newSolutions.clear();
             }
