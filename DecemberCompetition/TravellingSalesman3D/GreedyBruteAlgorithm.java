@@ -1,16 +1,16 @@
 import java.util.*;
 public class GreedyBruteAlgorithm
 {
+    private static int bruteLim = 5;
     public static ArrayList<DecemberCompetition.Point> solveProblem (ArrayList<DecemberCompetition.Point> points) {
         ArrayList<Integer> visited = new ArrayList<Integer>();
         ArrayList<DecemberCompetition.Point> solution = new ArrayList<DecemberCompetition.Point>();
         //might as well start at the first point
         int currPoint = 0;
-        int maxPoint = points.size();
         visited.add(currPoint);
-        solution.add(points.get(currPoint));        
-
-        while (visited.size() < maxPoint - 8) 
+        solution.add(points.get(currPoint));
+        
+        while (visited.size() < points.size() - bruteLim) 
         {
             int nextPoint = findNearestPoint(points, visited, currPoint);
             solution.add(points.get(nextPoint));    
@@ -25,7 +25,7 @@ public class GreedyBruteAlgorithm
             {
                 it.remove();    
             }
-        }   
+        }
         ArrayList<DecemberCompetition.Point> bestSubsetPath = bruteForce(subset, points.get(0));
 
         for (int i = 0; i < bestSubsetPath.size(); i++) 
@@ -60,14 +60,7 @@ public class GreedyBruteAlgorithm
 
     public static ArrayList<DecemberCompetition.Point> bruteForce (ArrayList<DecemberCompetition.Point> points, DecemberCompetition.Point pStart) {
         //size of points input list must be 6 for now
-        ArrayList<ArrayList<Integer>> combs = indexCombinations();
-        /*int tot = 0;  
-        for (int i = 0; i < combs.size(); i++) 
-        {
-        System.out.println(combs.get(i).toString());
-        tot++;
-        }*/
-
+        ArrayList<ArrayList<Integer>> combs = listPermutations(indexList(bruteLim));
         ArrayList<ArrayList<DecemberCompetition.Point>> pCombs = new ArrayList<ArrayList<DecemberCompetition.Point>>();
 
         for (int i = 0; i < combs.size(); i++) 
@@ -85,70 +78,47 @@ public class GreedyBruteAlgorithm
 
         double bestLen = Double.MAX_VALUE;
         ArrayList<DecemberCompetition.Point> bestPath = null;
-        for (int i = 0; i < pCombs.size(); i++) 
+        for (int i = 0; i < pCombs.size(); i++)
         {
             double len = PathMeasure.evalPathLen(pCombs.get(i), true, pStart);
-            if (len < bestLen) 
+            if (len < bestLen)
             {
                 bestLen = len;
-                bestPath = pCombs.get(i); 
+                bestPath = pCombs.get(i);
             }
         }
         return bestPath;
     }
 
-    public static ArrayList<ArrayList<Integer>> indexCombinations () {
-        ArrayList<ArrayList<Integer>> combs = new ArrayList<ArrayList<Integer>>();
-        //five ways to pick first digit
-        int count = 0;
-        for (int a = 0; a < 8; a++) 
-        {
-            for (int b = 0; b < 8; b++) 
-            {
-                if (b == a) continue;
-                for (int c = 0; c < 8; c++) 
-                {
-                    if (c == a || c == b) continue;
-                    for (int d = 0; d < 8; d++)
-                    {
-                        if (d == a || d == b || d == c) continue;
-                        for (int e = 0; e < 8; e++)
-                        {
-                            if (e == a || e == b || e == c || e == d) continue;
-                            for (int f = 0; f < 8; f++)
-                            {
-                                if (f == a || f == b || f == c || f == d || f == e) continue;
-                                for (int g = 0; g < 8; g++) {
-                                    if (g == a || g == b || g == c || g == d || g == e || g == f) continue;
-                                    for (int h = 0; h < 8; h++) {
-                                        if (h == a || h == b || h == c || h == d || h == e || h == f || h == g) continue;
-                                        ArrayList<Integer> comb = new ArrayList<Integer>();   
-                                        comb.add(a);
-                                        comb.add(b);
-                                        comb.add(c);
-                                        comb.add(d);
-                                        comb.add(e);
-                                        comb.add(f);
-                                        comb.add(g);
-                                        comb.add(h);
-                                        combs.add(comb);
-                                        count++;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+    public static ArrayList<ArrayList<Integer>> listPermutations(ArrayList<Integer> list) {
+        if (list.size() == 0) {
+            ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
+            result.add(new ArrayList<Integer>());
+            return result;
         }
 
-        //Recursive integer permutation generator
-        //takes in arbitrary number of ints to permute
-        /*public static ArrayList<ArrayList<Integer>> indexPermutations (int n) {
-        if (n == 0) return new ArrayList<ArrayList<Integer>>(0);
+        ArrayList<ArrayList<Integer>> returnMe = new ArrayList<ArrayList<Integer>>();
 
-        }*/
-        //System.out.println(combs);
-        return combs;
+        Integer firstElement = list.remove(0);
+
+        ArrayList<ArrayList<Integer>> recursiveReturn = listPermutations(list);
+        for (ArrayList<Integer> li : recursiveReturn) {
+            for (int index = 0; index <= li.size(); index++) {
+                ArrayList<Integer> temp = new ArrayList<Integer>(li);
+                temp.add(index, firstElement);
+                returnMe.add(temp);
+            }
+        }
+        return returnMe;
+    }
+    public static ArrayList<Integer> indexList(int n) {
+        ArrayList<Integer> rvs = new ArrayList<Integer>();
+        for (int i = 0; i < n; i++) {
+            rvs.add(i);
+        }
+        return rvs;
+    }
+    public static void setBruteLim(int n) {
+        bruteLim = n;
     }
 }

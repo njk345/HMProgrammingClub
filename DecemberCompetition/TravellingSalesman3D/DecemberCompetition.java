@@ -75,7 +75,8 @@ public class DecemberCompetition {
 
         Scanner s = new Scanner(System.in);
         System.out.println("Which Algorithm Would You Like To Use:");
-        System.out.print("1 = Greedy-One, 2 = Random, 3 Greedy-Random, 4 Greedy-Brute: ");
+        System.out.print("1 = Greedy-One, 2 = Random, 3 = Greedy-Random, 4 = Greedy-Brute, ");
+        System.out.print("5 = Greedy-Brute-Random: ");
         int r = s.nextInt();
 
         switch (r) {
@@ -136,11 +137,49 @@ public class DecemberCompetition {
             System.out.println("Done!");
             break;
             case 4:
+            System.out.print("Do Brute Force on How Many Points? ");
+            int bLim = s.nextInt();
+            GreedyBruteAlgorithm.setBruteLim(bLim);
             for (ArrayList<Point> points : problems) {
                 solutions.add(GreedyBruteAlgorithm.solveProblem(points));
             }
             System.out.println("New Best = " + PathMeasure.evalAlgLen(solutions));
             outputSolutionsToFile("Nick Keirstead", solutions);
+            break;
+            
+            case 5:
+            int best3 = Integer.MAX_VALUE;
+            System.out.print("Keep Going Until Smaller Than What? ");
+            int r4 = s.nextInt();
+            System.out.print("Save To File Below What Value? ");
+            int saveThreshold2 = s.nextInt();
+            System.out.print("Do Brute Force on How Many Points? ");
+            int bLim2 = s.nextInt();
+            GreedyBruteAlgorithm.setBruteLim(bLim2);
+            while (true) {
+                for (ArrayList<Point> points : problems) {
+                    solutions.add(GuessingAlgorithm.solveProblem(points));
+                }
+                ArrayList<ArrayList<Point>> newSolutions = new ArrayList<ArrayList<Point>>(0);
+                for (ArrayList<Point> points : solutions) {
+                    newSolutions.add(GreedyBruteAlgorithm.solveProblem(points));
+                }
+                int l = PathMeasure.evalAlgLen(newSolutions);
+                if (l < r4) {
+                    outputSolutionsToFile("Nick Keirstead", newSolutions);
+                    break;
+                }
+                if (l < best3) {
+                    best3 = l;
+                    System.out.println("New Best Length: " + best3);
+                    if (l < saveThreshold2) {
+                        outputSolutionsToFile("Nick Keirstead", newSolutions);
+                    }
+                }
+                solutions.clear();
+                newSolutions.clear();
+            }
+            System.out.println("Done!");
             break;
 
             default:

@@ -15,6 +15,7 @@ public class PathMeasure
             sum += getDistance(points.get(i-1), points.get(i));
         }
         if (useDiffStart) {
+            if (start != null)
             sum += getDistance(start, points.get(points.size() - 1));
         } else {
             sum += getDistance(points.get(0), points.get(points.size() - 1));
