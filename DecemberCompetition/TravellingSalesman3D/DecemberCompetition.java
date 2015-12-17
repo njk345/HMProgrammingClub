@@ -182,16 +182,31 @@ public class DecemberCompetition {
             break;
             
             case 7:
-            //System.out.print("Do Brute Force on How Many Points (needs to be integer factor of 200)? ");
-            //int bLim4 = s.nextInt();
-            int[][] sections = new int[49][2];
-            for (int i = 0; i < 25; i++) {
-                sections[i][0] = i * 8;
-                sections[i][1] = 8;
+            System.out.print("Do Brute Force on How Many Points (needs to be integer factor of 200)? ");
+            int bLim4 = s.nextInt();
+            ArrayList<ArrayList<Integer>> sections = new ArrayList<ArrayList<Integer>>();
+            //try every offset
+            int finalSectLen = -1;
+            int index = -1;
+            for (int offset = 0; offset < bLim4; offset++) {
+                for (int i = 0; i < (int)((double) 200 / bLim4); i++) {
+                    index = i * bLim4 + offset;
+                    if (index + bLim4 >= 200) {
+                        finalSectLen = 200 - index;
+                        if (index == 200) index -= bLim4;
+                        break;
+                    }
+                    ArrayList<Integer> newSection = new ArrayList<Integer>();
+                    newSection.add(index);
+                    newSection.add(bLim4);
+                    sections.add(newSection);
+                }
             }
-            for (int i = 25; i < 49; i++) {
-                sections[i][0] = (i - 25) * 8 + 4;
-                sections[i][1] = 8;
+            if (index != -1) {
+                ArrayList<Integer> finalSection = new ArrayList<Integer>();
+                finalSection.add(index);
+                finalSection.add(finalSectLen);
+                sections.add(finalSection);
             }
             
             solutions = OptimizedGreedy.solveAllProblems(problems);

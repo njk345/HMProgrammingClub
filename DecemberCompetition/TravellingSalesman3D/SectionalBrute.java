@@ -1,11 +1,11 @@
 import java.util.*;
 public class SectionalBrute
 {
-    public static ArrayList<DecemberCompetition.Point> bruteMultSections(ArrayList<DecemberCompetition.Point> points, int[][] sections) {
+    public static ArrayList<DecemberCompetition.Point> bruteMultSections(ArrayList<DecemberCompetition.Point> points, ArrayList<ArrayList<Integer>> sections) {
         ArrayList<DecemberCompetition.Point> currSolution = new ArrayList<DecemberCompetition.Point>(points);
-        for (int i = 0; i < sections.length; i++) {
+        for (int i = 0; i < sections.size(); i++) {
             ArrayList<DecemberCompetition.Point> newSolution = new ArrayList<DecemberCompetition.Point>();
-            newSolution = bruteSection(currSolution, sections[i][0], sections[i][1]);
+            newSolution = bruteSection(currSolution, sections.get(i).get(0), sections.get(i).get(1));
             currSolution = newSolution;
         }
         return currSolution;
