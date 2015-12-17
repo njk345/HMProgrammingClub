@@ -1,14 +1,14 @@
 #BlueJ class context
-comment0.params=points
-comment0.target=java.util.ArrayList\ solveProblem(java.util.ArrayList)
-comment1.params=points\ visited\ start
-comment1.target=int\ findNearestPoint(java.util.ArrayList,\ java.util.ArrayList,\ int)
-comment2.params=points\ pStart
-comment2.target=java.util.ArrayList\ bruteForce(java.util.ArrayList,\ DecemberCompetition.Point)
-comment3.params=list
-comment3.target=java.util.ArrayList\ listPermutations(java.util.ArrayList)
-comment4.params=n
-comment4.target=java.util.ArrayList\ indexList(int)
+comment0.params=problems\ bruteLim
+comment0.target=java.util.ArrayList\ solveAllProblems(java.util.ArrayList,\ int)
+comment1.params=points\ bruteLim
+comment1.target=java.util.ArrayList\ solveProblem(java.util.ArrayList,\ int)
+comment2.params=points\ visited\ start
+comment2.target=int\ findNearestPoint(java.util.ArrayList,\ java.util.ArrayList,\ int)
+comment3.params=points\ pStart\ pBefore\ bruteLim
+comment3.target=java.util.ArrayList\ bruteForce(java.util.ArrayList,\ DecemberCompetition.Point,\ DecemberCompetition.Point,\ int)
+comment4.params=list
+comment4.target=java.util.ArrayList\ listPermutations(java.util.ArrayList)
 comment5.params=n
-comment5.target=void\ setBruteLim(int)
+comment5.target=java.util.ArrayList\ indexList(int)
 numComments=6

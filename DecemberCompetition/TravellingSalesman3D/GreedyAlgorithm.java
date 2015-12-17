@@ -1,6 +1,13 @@
 import java.util.*;
 
 public class GreedyAlgorithm {
+    public static ArrayList<ArrayList<DecemberCompetition.Point>> solveAllProblems (ArrayList<ArrayList<DecemberCompetition.Point>> problems) {
+        ArrayList<ArrayList<DecemberCompetition.Point>> solutions = new ArrayList<ArrayList<DecemberCompetition.Point>>();
+        for (ArrayList<DecemberCompetition.Point> points : problems) {
+            solutions.add(solveProblem(points));
+        }
+        return solutions;
+    }
     public static ArrayList<DecemberCompetition.Point> solveProblem (ArrayList<DecemberCompetition.Point> points) {
         ArrayList<Integer> visited = new ArrayList<Integer>();
         ArrayList<DecemberCompetition.Point> solution = new ArrayList<DecemberCompetition.Point>();

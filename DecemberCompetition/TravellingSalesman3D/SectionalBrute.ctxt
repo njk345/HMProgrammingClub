@@ -1,0 +1,6 @@
+#BlueJ class context
+comment0.params=points\ sections
+comment0.target=java.util.ArrayList\ bruteMultSections(java.util.ArrayList,\ int[][])
+comment1.params=points\ start\ len
+comment1.target=java.util.ArrayList\ bruteSection(java.util.ArrayList,\ int,\ int)
+numComments=2

@@ -1,22 +1,30 @@
 import java.util.*;
 public class GreedyBruteAlgorithm
 {
-    private static int bruteLim = 5;
-    public static ArrayList<DecemberCompetition.Point> solveProblem (ArrayList<DecemberCompetition.Point> points) {
+    public static ArrayList<ArrayList<DecemberCompetition.Point>> solveAllProblems (ArrayList<ArrayList<DecemberCompetition.Point>> problems, int bruteLim) {
+        ArrayList<ArrayList<DecemberCompetition.Point>> solutions = new ArrayList<ArrayList<DecemberCompetition.Point>>();
+        for (ArrayList<DecemberCompetition.Point> points : problems) {
+            solutions.add(solveProblem(points, bruteLim));
+        }
+        return solutions;
+    }
+    public static ArrayList<DecemberCompetition.Point> solveProblem (ArrayList<DecemberCompetition.Point> points, int bruteLim) {
         ArrayList<Integer> visited = new ArrayList<Integer>();
         ArrayList<DecemberCompetition.Point> solution = new ArrayList<DecemberCompetition.Point>();
+        ArrayList<DecemberCompetition.Point> regGreedy = GreedyAlgorithm.solveProblem(points);
+
         //might as well start at the first point
         int currPoint = 0;
         visited.add(currPoint);
         solution.add(points.get(currPoint));
-        
+
         while (visited.size() < points.size() - bruteLim) 
         {
             int nextPoint = findNearestPoint(points, visited, currPoint);
             solution.add(points.get(nextPoint));    
             visited.add(nextPoint);
             currPoint = nextPoint;
-        }         
+        }
 
         ArrayList<DecemberCompetition.Point> subset = new ArrayList<DecemberCompetition.Point>(points);
         for (Iterator<DecemberCompetition.Point> it = subset.iterator(); it.hasNext();) 
@@ -26,7 +34,7 @@ public class GreedyBruteAlgorithm
                 it.remove();    
             }
         }
-        ArrayList<DecemberCompetition.Point> bestSubsetPath = bruteForce(subset, points.get(0));
+        ArrayList<DecemberCompetition.Point> bestSubsetPath = bruteForce(subset, points.get(0), solution.get(solution.size() - 1), bruteLim);
 
         for (int i = 0; i < bestSubsetPath.size(); i++) 
         {
@@ -58,7 +66,7 @@ public class GreedyBruteAlgorithm
         //but I wouldn't call the method anyway in that situation
     }
 
-    public static ArrayList<DecemberCompetition.Point> bruteForce (ArrayList<DecemberCompetition.Point> points, DecemberCompetition.Point pStart) {
+    public static ArrayList<DecemberCompetition.Point> bruteForce (ArrayList<DecemberCompetition.Point> points, DecemberCompetition.Point pStart, DecemberCompetition.Point pBefore, int bruteLim) {
         //size of points input list must be 6 for now
         ArrayList<ArrayList<Integer>> combs = listPermutations(indexList(bruteLim));
         ArrayList<ArrayList<DecemberCompetition.Point>> pCombs = new ArrayList<ArrayList<DecemberCompetition.Point>>();
@@ -80,7 +88,7 @@ public class GreedyBruteAlgorithm
         ArrayList<DecemberCompetition.Point> bestPath = null;
         for (int i = 0; i < pCombs.size(); i++)
         {
-            double len = PathMeasure.evalPathLen(pCombs.get(i), true, pStart);
+            double len = PathMeasure.evalPathLen(pCombs.get(i), true, pStart, pBefore);
             if (len < bestLen)
             {
                 bestLen = len;
@@ -111,14 +119,12 @@ public class GreedyBruteAlgorithm
         }
         return returnMe;
     }
+
     public static ArrayList<Integer> indexList(int n) {
         ArrayList<Integer> rvs = new ArrayList<Integer>();
         for (int i = 0; i < n; i++) {
             rvs.add(i);
         }
         return rvs;
-    }
-    public static void setBruteLim(int n) {
-        bruteLim = n;
     }
 }

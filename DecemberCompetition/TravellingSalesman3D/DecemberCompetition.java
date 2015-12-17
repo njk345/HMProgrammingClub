@@ -67,34 +67,33 @@ public class DecemberCompetition {
     }
 
     public static void main(String[] args) {
-        // A 2d array containing an ArrayList for each problem
+        System.out.println("\f");
+        
         ArrayList<ArrayList<Point>> problems = getProblems();
 
-        // Will store your solutions
         ArrayList<ArrayList<Point>> solutions = new ArrayList<ArrayList<Point>>(0);
 
         Scanner s = new Scanner(System.in);
         System.out.println("Which Algorithm Would You Like To Use:");
-        System.out.print("1 = Greedy-One, 2 = Random, 3 = Greedy-Random, 4 = Greedy-Brute, ");
-        System.out.print("5 = Greedy-Brute-Random: ");
+        System.out.print("1 = Greedy, 2 = Random, 3 = Greedy-Random, 4 = Greedy-Brute,\n");
+        System.out.print("5 = Greedy-Brute-Random, ");
+        System.out.print("6 = Optimized-Greedy-Brute, ");
+        System.out.print("7 = Precision-Opt-Greedy-Brute: ");
         int r = s.nextInt();
 
         switch (r) {
             case 1:
-            for(ArrayList<Point> points : problems) {
-                solutions.add(GreedyAlgorithm.solveProblem(points));
-            }
+            solutions = GreedyAlgorithm.solveAllProblems(problems);
             System.out.println("Total Distance = " + PathMeasure.evalAlgLen(solutions));
             outputSolutionsToFile("Nick Keirstead", solutions);
             break;
+            
             case 2:
             int best = Integer.MAX_VALUE;
             System.out.print("Keep Going Until Smaller Than What? ");
             int r2 = s.nextInt();
             while (best > r2) {
-                for(ArrayList<Point> points : problems) {
-                    solutions.add(GuessingAlgorithm.solveProblem(points));
-                }
+                solutions = GuessingAlgorithm.solveAllProblems(problems);
                 int l = PathMeasure.evalAlgLen(solutions);
                 if (l < best) {
                     best = l;
@@ -105,6 +104,7 @@ public class DecemberCompetition {
             System.out.println("Done!");
             outputSolutionsToFile("Nick Keirstead", solutions);
             break;
+            
             case 3:
             int best2 = Integer.MAX_VALUE;
             System.out.print("Keep Going Until Smaller Than What? ");
@@ -112,13 +112,8 @@ public class DecemberCompetition {
             System.out.print("Save To File Below What Value? ");
             int saveThreshold = s.nextInt();
             while (true) {
-                for (ArrayList<Point> points : problems) {
-                    solutions.add(GuessingAlgorithm.solveProblem(points));
-                }
-                ArrayList<ArrayList<Point>> newSolutions = new ArrayList<ArrayList<Point>>(0);
-                for (ArrayList<Point> points : solutions) {
-                    newSolutions.add(GreedyAlgorithm.solveProblem(points));
-                }
+                solutions = GuessingAlgorithm.solveAllProblems(problems);
+                ArrayList<ArrayList<Point>> newSolutions = GreedyAlgorithm.solveAllProblems(solutions);
                 int l = PathMeasure.evalAlgLen(newSolutions);
                 if (l < r3) {
                     outputSolutionsToFile("Nick Keirstead", newSolutions);
@@ -136,13 +131,11 @@ public class DecemberCompetition {
             }
             System.out.println("Done!");
             break;
+            
             case 4:
             System.out.print("Do Brute Force on How Many Points? ");
             int bLim = s.nextInt();
-            GreedyBruteAlgorithm.setBruteLim(bLim);
-            for (ArrayList<Point> points : problems) {
-                solutions.add(GreedyBruteAlgorithm.solveProblem(points));
-            }
+            solutions = GreedyBruteAlgorithm.solveAllProblems(problems, bLim);
             System.out.println("New Best = " + PathMeasure.evalAlgLen(solutions));
             outputSolutionsToFile("Nick Keirstead", solutions);
             break;
@@ -155,15 +148,13 @@ public class DecemberCompetition {
             int saveThreshold2 = s.nextInt();
             System.out.print("Do Brute Force on How Many Points? ");
             int bLim2 = s.nextInt();
-            GreedyBruteAlgorithm.setBruteLim(bLim2);
+            if (bLim2 < 1) {
+                System.out.println("Invalid Brute-Force Amount");
+                break;
+            }
             while (true) {
-                for (ArrayList<Point> points : problems) {
-                    solutions.add(GuessingAlgorithm.solveProblem(points));
-                }
-                ArrayList<ArrayList<Point>> newSolutions = new ArrayList<ArrayList<Point>>(0);
-                for (ArrayList<Point> points : solutions) {
-                    newSolutions.add(GreedyBruteAlgorithm.solveProblem(points));
-                }
+                solutions = GuessingAlgorithm.solveAllProblems(problems);
+                ArrayList<ArrayList<Point>> newSolutions = GreedyBruteAlgorithm.solveAllProblems(solutions,bLim2);
                 int l = PathMeasure.evalAlgLen(newSolutions);
                 if (l < r4) {
                     outputSolutionsToFile("Nick Keirstead", newSolutions);
@@ -181,7 +172,38 @@ public class DecemberCompetition {
             }
             System.out.println("Done!");
             break;
-
+            
+            case 6:
+            System.out.print("Do Brute Force On How Many Points? ");
+            int bLim3 = s.nextInt();
+            solutions = OptimizedGreedyBrute.solveAllProblems(problems, bLim3);
+            System.out.println("Total Distance = " + PathMeasure.evalAlgLen(solutions));
+            outputSolutionsToFile("Nick Keirstead", solutions);
+            break;
+            
+            case 7:
+            //System.out.print("Do Brute Force on How Many Points (needs to be integer factor of 200)? ");
+            //int bLim4 = s.nextInt();
+            int[][] sections = new int[49][2];
+            for (int i = 0; i < 25; i++) {
+                sections[i][0] = i * 8;
+                sections[i][1] = 8;
+            }
+            for (int i = 25; i < 49; i++) {
+                sections[i][0] = (i - 25) * 8 + 4;
+                sections[i][1] = 8;
+            }
+            
+            solutions = OptimizedGreedy.solveAllProblems(problems);
+            ArrayList<ArrayList<DecemberCompetition.Point>> newSolutions = new ArrayList<ArrayList<DecemberCompetition.Point>>();
+            for (ArrayList<DecemberCompetition.Point> points : solutions) {
+                newSolutions.add(SectionalBrute.bruteMultSections(points,sections));
+            }
+            
+            System.out.println("Total Distance = " + PathMeasure.evalAlgLen(newSolutions));
+            outputSolutionsToFile("Nick Keirstead", newSolutions);
+            break;
+          
             default:
             System.out.println("Invalid Algorithm Choice");
         }

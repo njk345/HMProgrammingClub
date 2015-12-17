@@ -8,4 +8,6 @@ Best Distances So Far:
     
     Greedy-Brute Algorithm - 121003
     
+    Optimized-Greedy-Brute Algorithm - 113433 (Brute Limit = 2)
+    
     
