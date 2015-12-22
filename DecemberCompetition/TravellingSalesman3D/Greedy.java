@@ -1,16 +1,17 @@
 import java.util.*;
 
-public class GreedyAlgorithm {
-    public static ArrayList<ArrayList<DecemberCompetition.Point>> solveAllProblems (ArrayList<ArrayList<DecemberCompetition.Point>> problems) {
-        ArrayList<ArrayList<DecemberCompetition.Point>> solutions = new ArrayList<ArrayList<DecemberCompetition.Point>>();
-        for (ArrayList<DecemberCompetition.Point> points : problems) {
+public class Greedy {
+    public static ArrayList<ArrayList<Point>> solveAllProblems (ArrayList<ArrayList<Point>> problems) {
+        ArrayList<ArrayList<Point>> solutions = new ArrayList<ArrayList<Point>>();
+        for (ArrayList<Point> points : problems) {
             solutions.add(solveProblem(points));
         }
         return solutions;
     }
-    public static ArrayList<DecemberCompetition.Point> solveProblem (ArrayList<DecemberCompetition.Point> points) {
+
+    public static ArrayList<Point> solveProblem (ArrayList<Point> points) {
         ArrayList<Integer> visited = new ArrayList<Integer>();
-        ArrayList<DecemberCompetition.Point> solution = new ArrayList<DecemberCompetition.Point>();
+        ArrayList<Point> solution = new ArrayList<Point>();
         //might as well start at the first point
         int currPoint = 0;
         visited.add(currPoint);
@@ -25,8 +26,8 @@ public class GreedyAlgorithm {
         return solution;
     }
 
-    public static int findNearestPoint (ArrayList<DecemberCompetition.Point> points, ArrayList<Integer> visited, int start) {
-        DecemberCompetition.Point startP = points.get(start);
+    public static int findNearestPoint (ArrayList<Point> points, ArrayList<Integer> visited, int start) {
+        Point startP = points.get(start);
         double minDist = Double.MAX_VALUE; //ain't no distance greater than this
         int minIndex = -1; //ain't no index smaller than or equal to this
 
@@ -34,7 +35,7 @@ public class GreedyAlgorithm {
             if (visited.contains(i) || start == i) {
                 continue;
             }
-            double currDist = PathMeasure.getDistance(points.get(i), startP);
+            double currDist = points.get(i).getDistance(startP);
             if (i == 0 || currDist < minDist) {
                 minDist = currDist;
                 minIndex = i;

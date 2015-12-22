@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.params=
+comment0.target=java.util.ArrayList\ getProblems()
+comment1.params=fName
+comment1.target=java.util.ArrayList\ loadSolutions(java.lang.String)
+comment2.params=name\ solutions\ alg
+comment2.target=void\ outputSolutionsToFile(java.lang.String,\ java.util.ArrayList,\ int)
+comment3.params=solution\ alg
+comment3.target=boolean\ isNewBestSolution(java.util.ArrayList,\ int)
+numComments=4

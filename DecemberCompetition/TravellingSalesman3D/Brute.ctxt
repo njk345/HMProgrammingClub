@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.params=points\ sections
+comment0.target=java.util.ArrayList\ bruteMultSections(java.util.ArrayList,\ java.util.ArrayList)
+comment1.params=points\ start\ len
+comment1.target=java.util.ArrayList\ bruteSection(java.util.ArrayList,\ int,\ int)
+comment2.params=points\ pStart\ pBefore\ bruteLim
+comment2.target=java.util.ArrayList\ bruteForce(java.util.ArrayList,\ Point,\ Point,\ int)
+comment3.params=list
+comment3.target=java.util.ArrayList\ listPermutations(java.util.ArrayList)
+comment4.params=n
+comment4.target=java.util.ArrayList\ indexList(int)
+numComments=5
