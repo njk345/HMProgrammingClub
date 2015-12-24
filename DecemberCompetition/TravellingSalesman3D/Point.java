@@ -11,4 +11,7 @@ public class Point
     public double getDistance (Point p) {
         return Math.sqrt(Math.pow(x-p.x,2) + Math.pow(y-p.y,2) + Math.pow(z-p.z,2));
     }
+    public boolean equals(Point p) {
+        return p.x == x && p.y == y && p.z == z;
+    }
 }

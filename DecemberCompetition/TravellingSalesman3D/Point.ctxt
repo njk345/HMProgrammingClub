@@ -3,4 +3,6 @@ comment0.params=x\ y\ z\ index
 comment0.target=Point(int,\ int,\ int,\ int)
 comment1.params=p
 comment1.target=double\ getDistance(Point)
-numComments=2
+comment2.params=p
+comment2.target=boolean\ equals(Point)
+numComments=3
