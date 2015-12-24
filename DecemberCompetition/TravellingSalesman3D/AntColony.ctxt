@@ -1,4 +1,4 @@
 #BlueJ class context
-comment0.params=e\ allE
-comment0.target=double\ pathProb(AntColony.Edge,\ java.util.ArrayList)
+comment0.params=e
+comment0.target=int\ pathExplored(AntColony.Edge)
 numComments=1
