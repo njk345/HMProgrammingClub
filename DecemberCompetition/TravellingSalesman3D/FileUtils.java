@@ -4,7 +4,7 @@ public class FileUtils
 {
     public static final String[] algNames = {"Greedy","Random","GreedyRandom","GreedyBrute",
                                              "GreedyBruteRandom","OptimizedGreedy",
-                                             "OptimizedGreedyBrute"};
+                                             "OptimizedGreedyBrute", "AntColony"};
     public static ArrayList<ArrayList<Point>> getProblems() {
         ArrayList<ArrayList<Point>> problems = new ArrayList<ArrayList<Point>>(0);
         for(int a = 0; a < 20; a++) {

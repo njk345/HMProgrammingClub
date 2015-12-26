@@ -4,10 +4,6 @@ import java.io.*;
 public class Runner {
     public static void main(String[] args) {
         System.out.println("\f"); //flush the console
-        Point p1 = new Point((int)((double)309/125),(int)((double)217/125),(int)((double)26/125), 0);
-        Point p2 = new Point((int)((double)451/125),(int)((double)49/125),(int)((double)87/125), 0);
-        System.out.println(p1.getDistance(p2));
-        System.out.println(2 * Math.sqrt(5) / (double)125);
         
         //PRE-FOUND SOLUTIONS DEFINING AREA
         final ArrayList<ArrayList<Point>> opGreedySolutions = FileUtils.loadSolutions("OptimizedGreedyOutput.txt");
@@ -158,11 +154,18 @@ public class Runner {
             System.out.println("Total Distance = " + PathMeasure.evalAlgLen(newSolutions));
             solutions = newSolutions;
             break;
+            
+            case 8:
+            System.out.print("How Many Iterations? ");
+            int t = s.nextInt();
+            solutions = AntColony.solveAllProblems(problems,t);
+            System.out.println("Total Distance = " + PathMeasure.evalAlgLen(solutions));
+            break;
 
             default:
             System.out.println("Invalid Algorithm Choice");
         }
-        if (FileUtils.isNewBestSolution(solutions, r))
+        //if (FileUtils.isNewBestSolution(solutions, r))
             FileUtils.outputSolutionsToFile("Nick Keirstead", solutions, r);
     }
 }
