@@ -3,8 +3,11 @@ import java.util.*;
 public class Greedy {
     public static ArrayList<ArrayList<Point>> solveAllProblems (ArrayList<ArrayList<Point>> problems) {
         ArrayList<ArrayList<Point>> solutions = new ArrayList<ArrayList<Point>>();
+        int times = 0;
         for (ArrayList<Point> points : problems) {
             solutions.add(solveProblem(points));
+            times++;
+            if (times == 1) break;
         }
         return solutions;
     }

@@ -1,10 +1,14 @@
 #BlueJ class context
-comment0.params=problems\ t
-comment0.target=java.util.ArrayList\ solveAllProblems(java.util.ArrayList,\ int)
-comment1.params=points\ t
-comment1.target=java.util.ArrayList\ solveProblem(java.util.ArrayList,\ int)
-comment2.params=
-comment2.target=void\ evapPheromones()
-comment3.params=e
-comment3.target=int\ pathExplored(AntColony.Edge)
-numComments=4
+comment0.params=problems\ t\ a
+comment0.target=java.util.ArrayList\ solveAllProblems(java.util.ArrayList,\ int,\ int)
+comment1.params=points\ t\ a
+comment1.target=java.util.ArrayList\ solveProblem(java.util.ArrayList,\ int,\ int)
+comment2.params=currBest\ ants
+comment2.target=java.util.ArrayList\ findNewGlobalBest(double,\ java.util.ArrayList)
+comment3.params=usedPaths
+comment3.target=void\ evapPheromones(java.util.ArrayList)
+comment4.params=e\ usedPaths
+comment4.target=int\ pathExplored(AntColony.Edge,\ java.util.ArrayList)
+comment5.params=a\ b
+comment5.target=double\ pow(double,\ double)
+numComments=6

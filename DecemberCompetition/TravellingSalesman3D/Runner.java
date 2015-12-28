@@ -158,7 +158,9 @@ public class Runner {
             case 8:
             System.out.print("How Many Iterations? ");
             int t = s.nextInt();
-            solutions = AntColony.solveAllProblems(problems,t);
+            System.out.print("How Many Ants? ");
+            int a = s.nextInt();
+            solutions = AntColony.solveAllProblems(problems,t,a);
             System.out.println("Total Distance = " + PathMeasure.evalAlgLen(solutions));
             break;
 
