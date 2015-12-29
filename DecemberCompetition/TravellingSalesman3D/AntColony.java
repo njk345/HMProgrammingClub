@@ -2,27 +2,29 @@ import java.util.*;
 public class AntColony
 {
     //constants to play around with
-    public static final double alpha = 1, beta = 5, rho = 0.05, q = 1, randThresh = 0.01;
-    
-    public static ArrayList<ArrayList<Point>> solveAllProblems(ArrayList<ArrayList<Point>> problems, int t, int a) {
-        ArrayList<ArrayList<Point>> solutions = new ArrayList<ArrayList<Point>>();
+    public static final double alpha = 1, beta = 1, rho = 0.05, q = 1, randThresh = 0.02;
+
+    public static int[][] solveAllProblems(ArrayList<ArrayList<Point>> problems, int t, int a, ArrayList<ArrayList<Point>> bestStarts) {
+        int[][] solutions = new int[problems.size()][problems.get(0).size()];
         int times = 0;
-        for (ArrayList<Point> points : problems) {
-            solutions.add(solveProblem(points, t, a));
-            if (++times == 1) break;
+        for (int i = 0; i < problems.size(); i++) {
+            solutions[i] = solveProblem(problems.get(i), t, a, bestStarts.get(i).get(0).index);
+            System.out.println(" Solved Problem " + (i + 1));
         }
         return solutions;
     }
-    public static ArrayList<Point> solveProblem(ArrayList<Point> points, int t, int a) {
-        ArrayList<Edge> usedPaths = new ArrayList<Edge>();
-        ArrayList<Ant> ants = new ArrayList<Ant>();
-        ArrayList<Point> globalBest = null;
+
+    public static int[] solveProblem(ArrayList<Point> points, int t, int a, int start) {
+        HashMap<List<Integer>, Double> usedPaths = new HashMap<List<Integer>, Double>();
+        Ant[] ants = new Ant[a];
+        int[] globalBest = new int[points.size()];
         double globalBestLen = Double.MAX_VALUE;
         
+
         for (int i = 0; i < a; i++) {
-            ants.add(new Ant(points));
+            ants[i] = new Ant(points, start);
         }
-        
+
         for (int i = 0; i < t; i++) {
             for (Ant ant : ants) {
                 ant.makeTrip(usedPaths);
@@ -31,182 +33,202 @@ public class AntColony
                 ant.dropPheromones(usedPaths);
             }
             evapPheromones(usedPaths);
-            ArrayList<Point> nb = new ArrayList<Point>(findNewGlobalBest(globalBestLen, ants));
-            if (nb != null) {
+            int[] rv = findNewGlobalBest(globalBestLen, ants, points);
+            int[] nb = new int[rv.length];
+            for (int x = 0; x < nb.length; x++) {
+                nb[x] = rv[x];
+            }
+            if (nb[0] != -1) {
                 globalBest = nb;
-                globalBestLen = PathMeasure.evalPathLen(globalBest, null, globalBest.get(0));
+                globalBestLen = evalIntPathLen(globalBest, points);
             }
             for (Ant ant : ants) {
                 ant.reset();
             }
         }
+        System.out.print("Length = " + (int) globalBestLen);
         return globalBest;
     }
-    
+
     static class Ant {
-        Point currPoint;
+        int currPoint;
         ArrayList<Point> points;
-        ArrayList<Edge> edgeMemory;
-        ArrayList<Point> pointMemory;
-        public Ant(ArrayList<Point> points) {
+        int[] path;
+        int numVisited;
+        boolean[] visited;
+        int start;
+        
+        public Ant(ArrayList<Point> points, int start) {
             this.points = points;
-            currPoint = points.get(0);
-            edgeMemory = new ArrayList<Edge>();
-            pointMemory = new ArrayList<Point>();
-            pointMemory.add(currPoint);
+            path = new int[points.size()];
+            visited = new boolean[points.size()];
+            
+            this.start = start;
+            currPoint = start;
+            visited[start] = true;
+            path[0] = currPoint;
+            numVisited = 1;
         }
+
         public void reset() {
-            currPoint = points.get(0);
-            edgeMemory.clear();
-            pointMemory.clear();
+            for (int i = 0; i < visited.length; i++) {
+                visited[i] = false;
+            }
+            for (int i = 0; i < path.length; i++) {
+                //reset to meaningless path
+                path[i] = -1;
+            }
+            currPoint = start;
+            visited[start] = true;
+            path[0] = start;
+            numVisited = 1;
         }
-        public ArrayList<Point> getMemory() {
+
+        public int[] getPath() {
             //only to be invoked when ant has completed its path
-            return pointMemory;
+            return path;
         }
-        public void makeTrip(ArrayList<Edge> usedPaths) {
+
+        public void makeTrip(HashMap<List<Integer>, Double> usedPaths) {
             int moves = 0;
-            while (moves < points.size() - 1) {
+            while (numVisited < points.size()) {
                 advancePoint(usedPaths);
+                //System.out.println(moves);
                 moves++;
-                System.out.println(moves);
             }
         }
-        public void dropPheromones(ArrayList<Edge> usedPaths) {
+
+        public void dropPheromones(HashMap<List<Integer>, Double> usedPaths) {
             //updates pheromones on travelled edges
             //only to be invoked after path has been completed
-            double pAmount = q / PathMeasure.evalPathLen(pointMemory,null,pointMemory.get(0));
-            for (int i = 0; i < edgeMemory.size(); i++) {
-                int index = pathExplored(edgeMemory.get(i), usedPaths);
-                if (index == -1) {
-                    //if one of the paths the ant went on isn't yet explored
-                    usedPaths.add(edgeMemory.get(i));
-                    edgeMemory.get(i).addPheromone(pAmount);
+            double pAmount = q / evalIntPathLen(path, points);
+            for (int i = 0; i < path.length - 1; i++) {
+                ArrayList<Integer> e = new ArrayList<Integer>();
+                e.add(path[i]);
+                e.add(path[i+1]);
+                if (usedPaths.containsKey(e)) {
+                    //if path explored before
+                    double currP = usedPaths.get(e);
+                    usedPaths.put(e, currP + pAmount);
                 }
                 else {
-                    //path has been explored before
-                    usedPaths.get(index).addPheromone(pAmount);
+                    //if path new
+                    usedPaths.put(e, pAmount);
                 }
             }
         }
-        public void advancePoint(ArrayList<Edge> usedPaths) {
+
+        public void advancePoint(HashMap<List<Integer>, Double> usedPaths) {
             //sends ant to next point out of points, updates position, updates memory
-            Point nextP = findNext(usedPaths);
-            edgeMemory.add(new Edge(currPoint,nextP));
+            int nextP = findNext(usedPaths);
             currPoint = nextP;
-            pointMemory.add(currPoint);
+            numVisited++;
+            path[numVisited-1] = currPoint;
+            visited[currPoint] = true;
         }
-        private Point findNext(ArrayList<Edge> usedPaths) {
-            Random r = new Random();
-            double chance = r.nextDouble();
-            int rp = r.nextInt(points.size());
-            if (chance < randThresh && !pointMemory.contains(points.get(rp))) {
-                //returns random next point 
-                return points.get(rp);
-            }
-            
+
+        private int findNext(HashMap<List<Integer>, Double> usedPaths) {
+//             Random r = new Random();
+//             double chance = r.nextDouble();
+//             int rp = r.nextInt(points.size());
+//             if (chance < randThresh && !visited[rp]) {
+//                 //returns random next point
+//                 return rp;
+//             }
+
             //returns next point based on probability
             double highestProb = -1;
-            Point nextPoint = null;
+            int nextPoint = -1;
             for (int i = 0; i < points.size(); i++) {
                 Point cp = points.get(i);
-                if (!pointMemory.contains(cp)) {
+                if (!visited[cp.index]) {
                     double prob = pathProb(cp, points, usedPaths);
                     if (prob > highestProb) {
                         highestProb = prob;
-                        nextPoint = cp;
+                        nextPoint = cp.index;
                     }
                 }
             }
             return nextPoint;
         }
-        private double pathProb(Point next, ArrayList<Point> points, ArrayList<Edge> usedPaths) {
-            //returns probability that ant will go to given next Point
-            Edge potential = new Edge(currPoint, next);
-            int index;
-            if ((index = pathExplored(potential, usedPaths)) != -1) {
-                potential = usedPaths.get(index);
+
+        private double pathProb(Point next, ArrayList<Point> points, HashMap<List<Integer>, Double> usedPaths) {
+            ArrayList<Integer> e = new ArrayList<Integer>();
+            e.add(currPoint);
+            e.add(next.index);
+            double num = pow(1 / points.get(currPoint).getDistance(next), beta);
+            if (usedPaths.containsKey(e)) {
+                num += pow(usedPaths.get(e), alpha);
             }
-            //sum up the length + pheromone level of all other possible next points
-            double sum = 0;
+            
+            double denom = 0;
             for (int i = 0; i < points.size(); i++) {
-                if (!pointMemory.contains(points.get(i))) {
-                    Edge otherPotential = new Edge(currPoint, points.get(i));
-                    int index2;
-                    if ((index2 = pathExplored(otherPotential, usedPaths)) != -1) {
-                        otherPotential = usedPaths.get(index2);
+                if (!visited[i]) {
+                    ArrayList<Integer> eOther = new ArrayList<Integer>();
+                    eOther.add(currPoint);
+                    eOther.add(points.get(i).index);
+                    denom += pow(1 / points.get(currPoint).getDistance(points.get(i)), beta);
+                    
+                    if (usedPaths.containsKey(eOther)) {
+                        denom += pow(usedPaths.get(eOther), alpha);
                     }
-                    sum += pow(otherPotential.getPheromone(), alpha);
-                    sum += pow(1/otherPotential.getLen(), beta);
                 }
             }
-            return (Math.pow(potential.getPheromone(),alpha) + Math.pow(1/potential.getLen(), beta)) / sum;
+            return num / denom;
         }
     }
-    static class Edge {
-        double pheromone;
-        double len;
-        Point p1, p2;
-        public Edge(Point p1, Point p2) {
-            this.p1 = p1;
-            this.p2 = p2;
-            this.len = p1.getDistance(p2);
-            this.pheromone = 0;
-        }
-        public void setPheromone(double p) {
-            this.pheromone = p;
-        }
-        public void addPheromone(double p) {
-            this.pheromone += p;    
-        }
-        public double getPheromone() {
-            return this.pheromone;
-        }
-        public double getLen() {
-            return this.len;
-        }
-        public Point getStart() {
-            return p1;
-        }
-        public Point getEnd() {
-            return p2;
-        }
-        public boolean equals(Edge e) {
-            //note that direction matters: A -> B != B -> A
-            return e.getStart().equals(p1) && e.getEnd().equals(p2);
-        }
-    }
-    public static ArrayList<Point> findNewGlobalBest (double currBest, ArrayList<Ant> ants) {
+
+    public static int[] findNewGlobalBest (double currBest, Ant[] ants, ArrayList<Point> points) {
         double bestLen = currBest;
-        ArrayList<Point> newGlobalBest = null;
+        int[] newGlobalBest = new int[points.size()];
+        newGlobalBest[0] = -1;
+        //set first el to -1 b/c, if this is returned, I know there isn't new global best path
         for (Ant a : ants) {
-            ArrayList<Point> localBest = a.getMemory();
-            double localLen = PathMeasure.evalPathLen(localBest, null, localBest.get(0));
+            int[] localPath = a.getPath();
+            double localLen = evalIntPathLen(localPath, points);
             if (localLen < bestLen) {
                 bestLen = localLen;
-                newGlobalBest = localBest;
+                newGlobalBest = localPath;
             }
         }
         return newGlobalBest;
         //if null is returned, no new global best path was found
     }
-    public static void evapPheromones(ArrayList<Edge> usedPaths) {
-        for (int i = 0; i < usedPaths.size(); i++) {
-            Edge e = usedPaths.get(i);
-            e.setPheromone(e.getPheromone() * (1 - rho));
+
+    public static void evapPheromones(HashMap<List<Integer>, Double> usedPaths) {
+        for (List<Integer> key : usedPaths.keySet()) {
+            double currVal = usedPaths.get(key);
+            usedPaths.put(key, (1 - rho) * currVal);
         }
     }
-    public static int pathExplored(Edge e, ArrayList<Edge> usedPaths) {
-        for (int i = 0; i < usedPaths.size(); i++) {
-            if (usedPaths.get(i).equals(e)) {
-                return i;
-            }
+
+    public static ArrayList<Point> indicesToPoints (int[] indices, ArrayList<Point> points) {
+        ArrayList<Point> rvs = new ArrayList<Point>();
+        for (int i = 0; i < indices.length; i++) {
+            rvs.add(points.get(indices[i]));
         }
-        return -1; //e not in usedPaths
+        return rvs;
     }
+    
+    public static double evalIntPathLen (int[] indices, ArrayList<Point> points) {
+        double len = 0;
+        for (int i = 0; i < indices.length - 1; i++) {
+            len += points.get(indices[i]).getDistance(points.get(indices[i+1]));
+        }
+        len += points.get(indices[indices.length - 1]).getDistance(points.get(0));
+        return len;
+    }
+
     public static double pow(final double a, final double b) {
         final int x = (int) (Double.doubleToLongBits(a) >> 32);
         final int y = (int) (b * (x - 1072632447) + 1072632447);
         return Double.longBitsToDouble(((long) y) << 32);
+    }
+    
+    public static void print(int[] a) {
+        for (int i = 0; i < 5; i++) {
+            System.out.print(a[i] + " ");
+        }
+        System.out.println();
     }
 }

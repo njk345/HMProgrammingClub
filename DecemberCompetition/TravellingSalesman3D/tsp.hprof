@@ -1,0 +1,266 @@
+JAVA PROFILE 1.0.1, created Tue Dec 29 11:49:27 2015
+
+Copyright (c) 2003, 2005, Oracle and/or its affiliates. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+
+  - Neither the name of Oracle nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+Header for -agentlib:hprof (or -Xrunhprof) ASCII Output (JDK 5.0 JVMTI based)
+
+WARNING!  This file format is under development, and is subject to
+change without notice.
+
+This file contains the following types of records:
+
+THREAD START
+THREAD END      mark the lifetime of Java threads
+
+TRACE           represents a Java stack trace.  Each trace consists
+                of a series of stack frames.  Other records refer to
+                TRACEs to identify (1) where object allocations have
+                taken place, (2) the frames in which GC roots were
+                found, and (3) frequently executed methods.
+
+HEAP DUMP       is a complete snapshot of all live objects in the Java
+                heap.  Following distinctions are made:
+
+                ROOT    root set as determined by GC
+                CLS     classes 
+                OBJ     instances
+                ARR     arrays
+
+SITES           is a sorted list of allocation sites.  This identifies
+                the most heavily allocated object types, and the TRACE
+                at which those allocations occurred.
+
+CPU SAMPLES     is a statistical profile of program execution.  The VM
+                periodically samples all running threads, and assigns
+                a quantum to active TRACEs in those threads.  Entries
+                in this record are TRACEs ranked by the percentage of
+                total quanta they consumed; top-ranked TRACEs are
+                typically hot spots in the program.
+
+CPU TIME        is a profile of program execution obtained by measuring
+                the time spent in individual methods (excluding the time
+                spent in callees), as well as by counting the number of
+                times each method is called. Entries in this record are
+                TRACEs ranked by the percentage of total CPU time. The
+                "count" field indicates the number of times each TRACE 
+                is invoked.
+
+MONITOR TIME    is a profile of monitor contention obtained by measuring
+                the time spent by a thread waiting to enter a monitor.
+                Entries in this record are TRACEs ranked by the percentage
+                of total monitor contention time and a brief description
+                of the monitor.  The "count" field indicates the number of 
+                times the monitor was contended at that TRACE.
+
+MONITOR DUMP    is a complete snapshot of all the monitors and threads in 
+                the System.
+
+HEAP DUMP, SITES, CPU SAMPLES|TIME and MONITOR DUMP|TIME records are generated 
+at program exit.  They can also be obtained during program execution by typing 
+Ctrl-\ (on Solaris) or by typing Ctrl-Break (on Win32).
+
+--------
+
+THREAD START (obj=50000184, id = 200001, name="main", group="main")
+THREAD END (id = 200001)
+THREAD START (obj=50000184, id = 200005, name="DestroyJavaVM", group="main")
+THREAD END (id = 200005)
+TRACE 300230:
+	java.util.ArrayList.iterator(ArrayList.java:834)
+	java.util.AbstractList.hashCode(AbstractList.java:540)
+	java.util.HashMap.hash(HashMap.java:338)
+	java.util.HashMap.containsKey(HashMap.java:595)
+TRACE 300232:
+	java.util.HashMap.hash(HashMap.java:338)
+	java.util.HashMap.containsKey(HashMap.java:595)
+	AntColony$Ant.pathProb(AntColony.java:172)
+	AntColony$Ant.findNext(AntColony.java:145)
+TRACE 300231:
+	AntColony$Ant.pathProb(AntColony.java:172)
+	AntColony$Ant.findNext(AntColony.java:145)
+	AntColony$Ant.advancePoint(AntColony.java:123)
+	AntColony$Ant.makeTrip(AntColony.java:95)
+TRACE 300225:
+	AntColony$Ant.pathProb(AntColony.java:165)
+	AntColony$Ant.findNext(AntColony.java:145)
+	AntColony$Ant.advancePoint(AntColony.java:123)
+	AntColony$Ant.makeTrip(AntColony.java:95)
+TRACE 300212:
+	java.io.FileInputStream.readBytes(FileInputStream.java:Unknown line)
+	java.io.FileInputStream.read(FileInputStream.java:246)
+	java.io.BufferedInputStream.read1(BufferedInputStream.java:284)
+	java.io.BufferedInputStream.read(BufferedInputStream.java:345)
+TRACE 300234:
+	java.util.HashMap.getNode(HashMap.java:580)
+	java.util.HashMap.containsKey(HashMap.java:595)
+	AntColony$Ant.pathProb(AntColony.java:172)
+	AntColony$Ant.findNext(AntColony.java:145)
+TRACE 300221:
+	java.util.Arrays.copyOf(Arrays.java:3181)
+	java.util.ArrayList.grow(ArrayList.java:261)
+	java.util.ArrayList.ensureExplicitCapacity(ArrayList.java:235)
+	java.util.ArrayList.ensureCapacityInternal(ArrayList.java:227)
+TRACE 300236:
+	java.util.HashMap.get(HashMap.java:556)
+	AntColony$Ant.pathProb(AntColony.java:173)
+	AntColony$Ant.findNext(AntColony.java:145)
+	AntColony$Ant.advancePoint(AntColony.java:123)
+TRACE 300239:
+	AntColony$Ant.pathProb(AntColony.java:167)
+	AntColony$Ant.findNext(AntColony.java:145)
+	AntColony$Ant.advancePoint(AntColony.java:123)
+	AntColony$Ant.makeTrip(AntColony.java:95)
+TRACE 300238:
+	java.util.ArrayList.iterator(ArrayList.java:834)
+	java.util.AbstractList.hashCode(AbstractList.java:540)
+	java.util.HashMap.hash(HashMap.java:338)
+	java.util.HashMap.containsKey(HashMap.java:595)
+TRACE 300240:
+	AntColony$Ant.findNext(AntColony.java:142)
+	AntColony$Ant.advancePoint(AntColony.java:123)
+	AntColony$Ant.makeTrip(AntColony.java:95)
+	AntColony.solveProblem(AntColony.java:30)
+TRACE 300241:
+	java.lang.Integer.valueOf(Integer.java:832)
+	AntColony$Ant.pathProb(AntColony.java:168)
+	AntColony$Ant.findNext(AntColony.java:145)
+	AntColony$Ant.advancePoint(AntColony.java:123)
+TRACE 300242:
+	AntColony$Ant.pathProb(AntColony.java:160)
+	AntColony$Ant.findNext(AntColony.java:145)
+	AntColony$Ant.advancePoint(AntColony.java:123)
+	AntColony$Ant.makeTrip(AntColony.java:95)
+TRACE 300243:
+	java.util.HashMap.hash(HashMap.java:338)
+	java.util.HashMap.containsKey(HashMap.java:595)
+	AntColony$Ant.pathProb(AntColony.java:160)
+	AntColony$Ant.findNext(AntColony.java:145)
+TRACE 300247:
+	java.lang.Integer.valueOf(Integer.java:832)
+	AntColony$Ant.pathProb(AntColony.java:169)
+	AntColony$Ant.findNext(AntColony.java:145)
+	AntColony$Ant.advancePoint(AntColony.java:123)
+TRACE 300226:
+	AntColony$Ant.makeTrip(AntColony.java:97)
+	AntColony.solveProblem(AntColony.java:30)
+	AntColony.solveAllProblems(AntColony.java:11)
+	Runner.main(Runner.java:163)
+TRACE 300217:
+	java.util.ArrayList.ensureExplicitCapacity(ArrayList.java:235)
+	java.util.ArrayList.ensureCapacityInternal(ArrayList.java:227)
+	java.util.ArrayList.add(ArrayList.java:458)
+	AntColony$Ant.pathProb(AntColony.java:168)
+TRACE 300222:
+	AntColony$Ant.findNext(AntColony.java:145)
+	AntColony$Ant.advancePoint(AntColony.java:123)
+	AntColony$Ant.makeTrip(AntColony.java:95)
+	AntColony.solveProblem(AntColony.java:30)
+TRACE 300220:
+	AntColony$Ant.pathProb(AntColony.java:170)
+	AntColony$Ant.findNext(AntColony.java:145)
+	AntColony$Ant.advancePoint(AntColony.java:123)
+	AntColony$Ant.makeTrip(AntColony.java:95)
+TRACE 300246:
+	java.util.HashMap.get(HashMap.java:556)
+	AntColony$Ant.pathProb(AntColony.java:161)
+	AntColony$Ant.findNext(AntColony.java:145)
+	AntColony$Ant.advancePoint(AntColony.java:123)
+TRACE 300235:
+	AntColony$Ant.makeTrip(AntColony.java:94)
+	AntColony.solveProblem(AntColony.java:30)
+	AntColony.solveAllProblems(AntColony.java:11)
+	Runner.main(Runner.java:163)
+TRACE 300245:
+	java.util.HashMap.getNode(HashMap.java:580)
+	java.util.HashMap.containsKey(HashMap.java:595)
+	AntColony$Ant.pathProb(AntColony.java:160)
+	AntColony$Ant.findNext(AntColony.java:145)
+TRACE 300248:
+	AntColony$Ant.findNext(AntColony.java:145)
+	AntColony$Ant.advancePoint(AntColony.java:123)
+	AntColony$Ant.makeTrip(AntColony.java:95)
+	AntColony.solveProblem(AntColony.java:30)
+TRACE 300218:
+	AntColony.pow(AntColony.java:223)
+	AntColony$Ant.pathProb(AntColony.java:170)
+	AntColony$Ant.findNext(AntColony.java:145)
+	AntColony$Ant.advancePoint(AntColony.java:123)
+TRACE 300216:
+	AntColony$Ant.pathProb(AntColony.java:172)
+	AntColony$Ant.findNext(AntColony.java:145)
+	AntColony$Ant.advancePoint(AntColony.java:123)
+	AntColony$Ant.makeTrip(AntColony.java:95)
+TRACE 300233:
+	AntColony$Ant.makeTrip(AntColony.java:94)
+	AntColony.solveProblem(AntColony.java:30)
+	AntColony.solveAllProblems(AntColony.java:11)
+	Runner.main(Runner.java:163)
+TRACE 300229:
+	java.util.HashMap.containsKey(HashMap.java:595)
+	AntColony$Ant.pathProb(AntColony.java:172)
+	AntColony$Ant.findNext(AntColony.java:145)
+	AntColony$Ant.advancePoint(AntColony.java:123)
+TRACE 300244:
+	AntColony$Ant.pathProb(AntColony.java:156)
+	AntColony$Ant.findNext(AntColony.java:145)
+	AntColony$Ant.advancePoint(AntColony.java:123)
+	AntColony$Ant.makeTrip(AntColony.java:95)
+CPU SAMPLES BEGIN (total = 17378) Tue Dec 29 11:52:49 2015
+rank   self  accum   count trace method
+   1 72.98% 72.98%   12683 300230 java.util.ArrayList.iterator
+   2 10.42% 83.40%    1811 300232 java.util.HashMap.hash
+   3  6.01% 89.41%    1044 300231 AntColony$Ant.pathProb
+   4  3.58% 93.00%     623 300225 AntColony$Ant.pathProb
+   5  2.07% 95.06%     359 300212 java.io.FileInputStream.readBytes
+   6  1.13% 96.20%     197 300234 java.util.HashMap.getNode
+   7  0.98% 97.17%     170 300221 java.util.Arrays.copyOf
+   8  0.64% 97.82%     112 300236 java.util.HashMap.get
+   9  0.58% 98.39%     100 300239 AntColony$Ant.pathProb
+  10  0.51% 98.91%      89 300238 java.util.ArrayList.iterator
+  11  0.20% 99.10%      34 300240 AntColony$Ant.findNext
+  12  0.11% 99.21%      19 300241 java.lang.Integer.valueOf
+  13  0.10% 99.31%      17 300242 AntColony$Ant.pathProb
+  14  0.08% 99.39%      14 300243 java.util.HashMap.hash
+  15  0.08% 99.47%      14 300247 java.lang.Integer.valueOf
+  16  0.07% 99.55%      13 300226 AntColony$Ant.makeTrip
+  17  0.05% 99.60%       9 300217 java.util.ArrayList.ensureExplicitCapacity
+  18  0.05% 99.65%       9 300222 AntColony$Ant.findNext
+  19  0.03% 99.68%       5 300220 AntColony$Ant.pathProb
+  20  0.03% 99.71%       5 300246 java.util.HashMap.get
+  21  0.02% 99.73%       4 300235 AntColony$Ant.makeTrip
+  22  0.02% 99.75%       4 300245 java.util.HashMap.getNode
+  23  0.02% 99.78%       4 300248 AntColony$Ant.findNext
+  24  0.02% 99.79%       3 300218 AntColony.pow
+  25  0.02% 99.81%       3 300216 AntColony$Ant.pathProb
+  26  0.02% 99.83%       3 300233 AntColony$Ant.makeTrip
+  27  0.01% 99.84%       2 300229 java.util.HashMap.containsKey
+  28  0.01% 99.85%       2 300244 AntColony$Ant.pathProb
+CPU SAMPLES END

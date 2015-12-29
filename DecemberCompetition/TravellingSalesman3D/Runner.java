@@ -160,14 +160,30 @@ public class Runner {
             int t = s.nextInt();
             System.out.print("How Many Ants? ");
             int a = s.nextInt();
-            solutions = AntColony.solveAllProblems(problems,t,a);
-            System.out.println("Total Distance = " + PathMeasure.evalAlgLen(solutions));
+            int[][] solutionIndices = AntColony.solveAllProblems(problems,t,a,opGreedySolutions);
+            double len = 0;
+            for (int i = 0; i < solutionIndices.length; i++) {
+                len += AntColony.evalIntPathLen(solutionIndices[i], problems.get(i));
+            }
+            System.out.println("Total Distance = " + (int)len);
+            solutions = indicesToPoints(solutionIndices, problems);
             break;
 
             default:
             System.out.println("Invalid Algorithm Choice");
         }
-        //if (FileUtils.isNewBestSolution(solutions, r))
+        if (FileUtils.isNewBestSolution(solutions, r))
             FileUtils.outputSolutionsToFile("Nick Keirstead", solutions, r);
+    }
+    public static ArrayList<ArrayList<Point>> indicesToPoints (int[][] indices, ArrayList<ArrayList<Point>> problems) {
+        ArrayList<ArrayList<Point>> rvs = new ArrayList<ArrayList<Point>>();
+        for (int i = 0; i < indices.length; i++) {
+            ArrayList<Point> points = new ArrayList<Point>();
+            for (int j = 0; j < indices[i].length; j++) {
+                points.add(problems.get(i).get(indices[i][j]));
+            }
+            rvs.add(points);
+        }
+        return rvs;
     }
 }
