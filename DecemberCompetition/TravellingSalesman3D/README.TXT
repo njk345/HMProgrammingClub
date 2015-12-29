@@ -15,3 +15,13 @@ Best Distances So Far:
     Ant Colony - 120453
     
     
+    Problem 1:
+        100 Iterations, 100 Ants
+        
+        a || b || rho || q || randThresh   -->    Score
+        
+        1                                          5558
+        2                                          5558
+        10                                         5560
+        0.5                                        5559
+        
