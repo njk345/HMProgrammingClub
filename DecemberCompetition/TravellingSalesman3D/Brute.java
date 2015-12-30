@@ -1,17 +1,17 @@
 import java.util.*;
 public class Brute
 {
-    public static ArrayList<Point> bruteMultSections(ArrayList<Point> points, ArrayList<ArrayList<Integer>> sections) {
+    public static ArrayList<Point> bruteMultSections(ArrayList<Point> points, ArrayList<ArrayList<Integer>> sections, int pNum, double[][] dists) {
         ArrayList<Point> currSolution = new ArrayList<Point>(points);
         for (int i = 0; i < sections.size(); i++) {
             ArrayList<Point> newSolution = new ArrayList<Point>();
-            newSolution = bruteSection(currSolution, sections.get(i).get(0), sections.get(i).get(1));
+            newSolution = bruteSection(currSolution, sections.get(i).get(0), sections.get(i).get(1), pNum, dists);
             currSolution = newSolution;
         }
         return currSolution;
     }
 
-    public static ArrayList<Point> bruteSection(ArrayList<Point> points, int start, int len) {
+    public static ArrayList<Point> bruteSection(ArrayList<Point> points, int start, int len, int pNum, double[][] dists) {
         ArrayList<Point> rv = new ArrayList<Point>();
         //add points up to the section to be brute-forced
         for (int i = 0; i < start; i++) {
@@ -35,7 +35,7 @@ public class Brute
             pBefore = points.get(start - 1);
         }
         //brute force it
-        ArrayList<Point> bestSubsetPath = bruteForce(subset, pBefore, pAfter, len);
+        ArrayList<Point> bestSubsetPath = bruteForce(subset, pBefore, pAfter, len, pNum, dists);
         //add the brute forced points to the solution set
         for (int i = 0; i < bestSubsetPath.size(); i++) {
             rv.add(bestSubsetPath.get(i));
@@ -47,7 +47,7 @@ public class Brute
         return rv;
     }
 
-    public static ArrayList<Point> bruteForce (ArrayList<Point> points, Point pStart, Point pBefore, int bruteLim) {
+    public static ArrayList<Point> bruteForce (ArrayList<Point> points, Point pStart, Point pBefore, int bruteLim, int pNum, double[][] dists) {
         //size of points input list must be 6 for now
         ArrayList<ArrayList<Integer>> combs = listPermutations(indexList(bruteLim));
         ArrayList<ArrayList<Point>> pCombs = new ArrayList<ArrayList<Point>>();
@@ -69,7 +69,7 @@ public class Brute
         ArrayList<Point> bestPath = null;
         for (int i = 0; i < pCombs.size(); i++)
         {
-            double len = PathMeasure.evalPathLen(pCombs.get(i), pStart, pBefore);
+            double len = PathMeasure.evalPathLen(pCombs.get(i), pStart, pBefore, pNum, dists);
             if (len < bestLen)
             {
                 bestLen = len;

@@ -3,8 +3,8 @@ import java.io.*;
 public class FileUtils
 {
     public static final String[] algNames = {"Greedy","Random","GreedyRandom","GreedyBrute",
-                                             "GreedyBruteRandom","OptimizedGreedy",
-                                             "OptimizedGreedyBrute", "AntColony"};
+            "GreedyBruteRandom","OptimizedGreedy",
+            "OptimizedGreedyBrute", "AntColony"};
     public static ArrayList<ArrayList<Point>> getProblems() {
         ArrayList<ArrayList<Point>> problems = new ArrayList<ArrayList<Point>>(0);
         for(int a = 0; a < 20; a++) {
@@ -31,6 +31,7 @@ public class FileUtils
 
         return problems;
     }
+
     public static ArrayList<ArrayList<Point>> loadSolutions(String fName) {
         String path = "BestOutputs/" + fName;
         File f = new File(path);
@@ -55,6 +56,30 @@ public class FileUtils
         }
         return solutions;
     }
+    
+    public static void replaceAllNewBestPaths(ArrayList<ArrayList<Point>> solutions, int alg) {
+        System.out.print("Paths Replaced: ");
+        for (int i = 0; i < solutions.size(); i++) {
+            if (solutions.get(i).get(0).index != solutions.get(i).get(1).index)
+                replaceIfNewBestPath(alg, solutions.get(i), i);
+        }
+        System.out.println();
+    }
+
+    public static void replaceIfNewBestPath(int alg, ArrayList<Point> points, int index) {
+        ArrayList<ArrayList<Point>> currBest = loadSolutions(algNames[alg-1] + "Output.txt");
+        int currBestLen = PathMeasure.evalAlgLen(currBest);
+        //System.out.println(PathMeasure.evalPathLen(currBest.get(0), null, currBest.get(0).get(0)));
+
+        ArrayList<ArrayList<Point>> newSolution = new ArrayList<ArrayList<Point>>(currBest);
+        newSolution.set(index, points);
+        int newLen = PathMeasure.evalAlgLen(newSolution);
+
+        if (newLen < currBestLen) {
+            outputSolutionsToFile("Nick Keirstead", newSolution, alg);
+            System.out.print((index + 1) + " ");
+        }
+    }
 
     public static void outputSolutionsToFile(String name, ArrayList<ArrayList<Point>> solutions, int alg) {
         String opFileName = algNames[alg-1] + "Output.txt";
@@ -75,11 +100,5 @@ public class FileUtils
             e.printStackTrace();
             System.out.println("There was an error outputting your solutions. You should probably find Ben Spector, Luca Koval, or Michael Truell. They will fix this.");
         }
-    }
-    public static boolean isNewBestSolution (ArrayList<ArrayList<Point>> solution, int alg) {
-        double newLen = PathMeasure.evalAlgLen(solution);
-        ArrayList<ArrayList<Point>> best = loadSolutions(algNames[alg-1] + "Output.txt");
-        double bestLen = PathMeasure.evalAlgLen(best);
-        return newLen < bestLen;
     }
 }

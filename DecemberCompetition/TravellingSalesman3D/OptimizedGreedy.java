@@ -1,21 +1,21 @@
 import java.util.*;
 public class OptimizedGreedy
 {
-    public static ArrayList<ArrayList<Point>> solveAllProblems (ArrayList<ArrayList<Point>> problems) {
+    public static ArrayList<ArrayList<Point>> solveAllProblems (ArrayList<ArrayList<Point>> problems, double[][][] dists) {
         ArrayList<ArrayList<Point>> solutions = new ArrayList<ArrayList<Point>>();
-        for (ArrayList<Point> points : problems) {
-            solutions.add(solveProblem(points));
+        for (int i = 0; i < problems.size(); i++) {
+            solutions.add(solveProblem(problems.get(i), i, dists[i]));
         }
         return solutions;
     }
 
-    public static ArrayList<Point> solveProblem (ArrayList<Point> points) {
+    public static ArrayList<Point> solveProblem (ArrayList<Point> points, int pNum, double[][] dists) {
         double bestDist = Double.MAX_VALUE;
         int bestStart = -1;
         ArrayList<Point> bestSolution = null;
         for (int i = 0; i < points.size(); i++) {
-            ArrayList<Point> solution = greedyArbStart(points,i);
-            double len = PathMeasure.evalPathLen(solution, null, solution.get(0));
+            ArrayList<Point> solution = Greedy.solveProblem(points, pNum, i, dists);
+            double len = PathMeasure.evalPathLen(solution, null, solution.get(0), pNum, dists);
             if (len < bestDist) {
                 bestDist = len;
                 bestStart = i;
@@ -23,18 +23,5 @@ public class OptimizedGreedy
             }
         }
         return bestSolution;
-    }
-
-    public static ArrayList<Point> greedyArbStart(ArrayList<Point> points, int start) {
-        ArrayList<Point> pCopies = new ArrayList<Point>();
-        Point startP = points.get(start);
-        pCopies.add(startP);
-        for (int i = 0; i < points.size(); i++) {
-            if (i != start) {
-                pCopies.add(points.get(i));
-            }
-        }
-        ArrayList<Point> rvs = Greedy.solveProblem(pCopies);
-        return rvs;
     }
 }

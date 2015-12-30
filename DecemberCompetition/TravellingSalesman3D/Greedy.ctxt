@@ -1,8 +1,8 @@
 #BlueJ class context
-comment0.params=problems
-comment0.target=java.util.ArrayList\ solveAllProblems(java.util.ArrayList)
-comment1.params=points
-comment1.target=java.util.ArrayList\ solveProblem(java.util.ArrayList)
-comment2.params=points\ visited\ start
-comment2.target=int\ findNearestPoint(java.util.ArrayList,\ java.util.ArrayList,\ int)
+comment0.params=problems\ dists
+comment0.target=java.util.ArrayList\ solveAllProblems(java.util.ArrayList,\ double[][][])
+comment1.params=points\ pNum\ start\ dists
+comment1.target=java.util.ArrayList\ solveProblem(java.util.ArrayList,\ int,\ int,\ double[][])
+comment2.params=currPoint\ visited\ dists
+comment2.target=int\ findNearestPoint(int,\ boolean[],\ double[][])
 numComments=3

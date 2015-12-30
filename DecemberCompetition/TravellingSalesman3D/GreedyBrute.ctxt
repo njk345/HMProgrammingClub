@@ -1,6 +1,6 @@
 #BlueJ class context
-comment0.params=problems\ bruteLim
-comment0.target=java.util.ArrayList\ solveAllProblems(java.util.ArrayList,\ int)
-comment1.params=points\ bruteLim
-comment1.target=java.util.ArrayList\ solveProblem(java.util.ArrayList,\ int)
+comment0.params=problems\ bruteLim\ dists
+comment0.target=java.util.ArrayList\ solveAllProblems(java.util.ArrayList,\ int,\ double[][][])
+comment1.params=points\ bruteLim\ pNum\ dists
+comment1.target=java.util.ArrayList\ solveProblem(java.util.ArrayList,\ int,\ int,\ double[][])
 numComments=2

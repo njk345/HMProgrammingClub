@@ -1,4 +1,4 @@
-JAVA PROFILE 1.0.1, created Tue Dec 29 13:08:31 2015
+JAVA PROFILE 1.0.1, created Tue Dec 29 23:50:50 2015
 
 Copyright (c) 2003, 2005, Oracle and/or its affiliates. All rights reserved.
 
@@ -90,183 +90,42 @@ Ctrl-\ (on Solaris) or by typing Ctrl-Break (on Win32).
 --------
 
 THREAD START (obj=50000184, id = 200001, name="main", group="main")
-THREAD END (id = 200001)
-THREAD START (obj=50000184, id = 200005, name="DestroyJavaVM", group="main")
-THREAD END (id = 200005)
-TRACE 300216:
-	java.util.ArrayList.iterator(ArrayList.java:834)
-	java.util.AbstractList.hashCode(AbstractList.java:540)
-	java.util.HashMap.hash(HashMap.java:338)
-	java.util.HashMap.containsKey(HashMap.java:595)
-TRACE 300227:
-	java.util.HashMap.hash(HashMap.java:338)
-	java.util.HashMap.containsKey(HashMap.java:595)
-	AntColony$Ant.pathProb(AntColony.java:176)
-	AntColony$Ant.findNext(AntColony.java:149)
-TRACE 300230:
-	AntColony$Ant.pathProb(AntColony.java:176)
-	AntColony$Ant.findNext(AntColony.java:149)
-	AntColony$Ant.advancePoint(AntColony.java:128)
-	AntColony$Ant.makeTrip(AntColony.java:100)
-TRACE 300219:
-	AntColony$Ant.pathProb(AntColony.java:169)
-	AntColony$Ant.findNext(AntColony.java:149)
-	AntColony$Ant.advancePoint(AntColony.java:128)
-	AntColony$Ant.makeTrip(AntColony.java:100)
-TRACE 300229:
-	java.util.HashMap.getNode(HashMap.java:580)
-	java.util.HashMap.containsKey(HashMap.java:595)
-	AntColony$Ant.pathProb(AntColony.java:176)
-	AntColony$Ant.findNext(AntColony.java:149)
+THREAD START (obj=50000285, id = 200006, name="SIGINT handler", group="system")
+THREAD END (id = 200006)
 TRACE 300209:
 	java.io.FileInputStream.readBytes(FileInputStream.java:Unknown line)
 	java.io.FileInputStream.read(FileInputStream.java:246)
 	java.io.BufferedInputStream.read1(BufferedInputStream.java:284)
 	java.io.BufferedInputStream.read(BufferedInputStream.java:345)
-TRACE 300236:
-	java.util.HashMap.get(HashMap.java:556)
-	AntColony$Ant.pathProb(AntColony.java:177)
-	AntColony$Ant.findNext(AntColony.java:149)
-	AntColony$Ant.advancePoint(AntColony.java:128)
-TRACE 300233:
-	java.util.Arrays.copyOf(Arrays.java:3181)
-	java.util.ArrayList.grow(ArrayList.java:261)
-	java.util.ArrayList.ensureExplicitCapacity(ArrayList.java:235)
-	java.util.ArrayList.ensureCapacityInternal(ArrayList.java:227)
-TRACE 300223:
-	AntColony$Ant.pathProb(AntColony.java:171)
-	AntColony$Ant.findNext(AntColony.java:149)
-	AntColony$Ant.advancePoint(AntColony.java:128)
-	AntColony$Ant.makeTrip(AntColony.java:100)
-TRACE 300232:
-	java.util.ArrayList.iterator(ArrayList.java:834)
-	java.util.AbstractList.hashCode(AbstractList.java:540)
-	java.util.HashMap.hash(HashMap.java:338)
-	java.util.HashMap.containsKey(HashMap.java:595)
-TRACE 300231:
-	AntColony$Ant.findNext(AntColony.java:147)
-	AntColony$Ant.advancePoint(AntColony.java:128)
-	AntColony$Ant.makeTrip(AntColony.java:100)
-	AntColony.solveProblem(AntColony.java:37)
-TRACE 300235:
-	java.util.HashMap.hash(HashMap.java:338)
-	java.util.HashMap.containsKey(HashMap.java:595)
-	AntColony$Ant.pathProb(AntColony.java:164)
-	AntColony$Ant.findNext(AntColony.java:149)
-TRACE 300237:
-	AntColony$Ant.pathProb(AntColony.java:164)
-	AntColony$Ant.findNext(AntColony.java:149)
-	AntColony$Ant.advancePoint(AntColony.java:128)
-	AntColony$Ant.makeTrip(AntColony.java:100)
-TRACE 300248:
-	java.lang.Integer.valueOf(Integer.java:832)
-	AntColony$Ant.pathProb(AntColony.java:173)
-	AntColony$Ant.findNext(AntColony.java:149)
-	AntColony$Ant.advancePoint(AntColony.java:128)
-TRACE 300245:
-	AntColony$Ant.findNext(AntColony.java:149)
-	AntColony$Ant.advancePoint(AntColony.java:128)
-	AntColony$Ant.makeTrip(AntColony.java:100)
-	AntColony.solveProblem(AntColony.java:37)
-TRACE 300239:
-	java.lang.Integer.valueOf(Integer.java:832)
-	AntColony$Ant.pathProb(AntColony.java:172)
-	AntColony$Ant.findNext(AntColony.java:149)
-	AntColony$Ant.advancePoint(AntColony.java:128)
-TRACE 300244:
-	java.util.Random.nextDouble(Random.java:532)
-	AntColony$Ant.findNext(AntColony.java:137)
-	AntColony$Ant.advancePoint(AntColony.java:128)
-	AntColony$Ant.makeTrip(AntColony.java:100)
-TRACE 300224:
-	AntColony$Ant.makeTrip(AntColony.java:102)
-	AntColony.solveProblem(AntColony.java:37)
-	AntColony.solveAllProblems(AntColony.java:12)
-	Runner.main(Runner.java:163)
-TRACE 300240:
-	java.util.HashMap.getNode(HashMap.java:580)
-	java.util.HashMap.containsKey(HashMap.java:595)
-	AntColony$Ant.pathProb(AntColony.java:164)
-	AntColony$Ant.findNext(AntColony.java:149)
-TRACE 300247:
-	java.util.HashMap.getNode(HashMap.java:580)
-	java.util.HashMap.get(HashMap.java:556)
-	AntColony$Ant.pathProb(AntColony.java:177)
-	AntColony$Ant.findNext(AntColony.java:149)
-TRACE 300215:
-	java.util.ArrayList.ensureExplicitCapacity(ArrayList.java:235)
-	java.util.ArrayList.ensureCapacityInternal(ArrayList.java:227)
-	java.util.ArrayList.add(ArrayList.java:458)
-	AntColony$Ant.pathProb(AntColony.java:172)
-TRACE 300242:
-	java.util.HashMap.get(HashMap.java:556)
-	AntColony$Ant.pathProb(AntColony.java:165)
-	AntColony$Ant.findNext(AntColony.java:149)
-	AntColony$Ant.advancePoint(AntColony.java:128)
-TRACE 300234:
-	AntColony$Ant.makeTrip(AntColony.java:99)
-	AntColony.solveProblem(AntColony.java:37)
-	AntColony.solveAllProblems(AntColony.java:12)
-	Runner.main(Runner.java:163)
-TRACE 300228:
-	java.util.HashMap.containsKey(HashMap.java:595)
-	AntColony$Ant.pathProb(AntColony.java:176)
-	AntColony$Ant.findNext(AntColony.java:149)
-	AntColony$Ant.advancePoint(AntColony.java:128)
-TRACE 300220:
-	AntColony$Ant.findNext(AntColony.java:149)
-	AntColony$Ant.advancePoint(AntColony.java:128)
-	AntColony$Ant.makeTrip(AntColony.java:100)
-	AntColony.solveProblem(AntColony.java:37)
-TRACE 300243:
-	AntColony$Ant.makeTrip(AntColony.java:102)
-	AntColony.solveProblem(AntColony.java:37)
-	AntColony.solveAllProblems(AntColony.java:12)
-	Runner.main(Runner.java:163)
-TRACE 300256:
-	java.util.HashMap.get(HashMap.java:556)
-	AntColony.evapPheromones(AntColony.java:204)
+TRACE 300225:
+	AntColony$Ant.makeTrip(AntColony.java:107)
 	AntColony.solveProblem(AntColony.java:42)
-	AntColony.solveAllProblems(AntColony.java:12)
-TRACE 300218:
-	AntColony.pow(AntColony.java:227)
-	AntColony$Ant.pathProb(AntColony.java:174)
-	AntColony$Ant.findNext(AntColony.java:149)
-	AntColony$Ant.advancePoint(AntColony.java:128)
-TRACE 300255:
-	AntColony.fillDistsMatrix(AntColony.java:240)
-	AntColony.solveProblem(AntColony.java:28)
-	AntColony.solveAllProblems(AntColony.java:12)
-	Runner.main(Runner.java:163)
-CPU SAMPLES BEGIN (total = 26717) Tue Dec 29 13:13:50 2015
+	AntColony.solveAllProblems(AntColony.java:17)
+	Runner.main(Runner.java:194)
+TRACE 300223:
+	AntColony$Ant.findNext(AntColony.java:142)
+	AntColony$Ant.advancePoint(AntColony.java:124)
+	AntColony$Ant.makeTrip(AntColony.java:107)
+	AntColony.solveProblem(AntColony.java:42)
+TRACE 300237:
+	AntColony.solveProblem(AntColony.java:44)
+	AntColony.solveAllProblems(AntColony.java:17)
+	Runner.main(Runner.java:194)
+TRACE 300227:
+	AntColony$Ant.findNext(AntColony.java:135)
+	AntColony$Ant.advancePoint(AntColony.java:124)
+	AntColony$Ant.makeTrip(AntColony.java:107)
+	AntColony.solveProblem(AntColony.java:42)
+TRACE 300239:
+	AntColony.solveProblem(AntColony.java:48)
+	AntColony.solveAllProblems(AntColony.java:17)
+	Runner.main(Runner.java:194)
+CPU SAMPLES BEGIN (total = 246375) Wed Dec 30 00:44:01 2015
 rank   self  accum   count trace method
-   1 65.22% 65.22%   17426 300216 java.util.ArrayList.iterator
-   2 12.66% 77.89%    3383 300227 java.util.HashMap.hash
-   3  8.86% 86.75%    2368 300230 AntColony$Ant.pathProb
-   4  4.14% 90.89%    1107 300219 AntColony$Ant.pathProb
-   5  3.01% 93.91%     805 300229 java.util.HashMap.getNode
-   6  1.74% 95.64%     464 300209 java.io.FileInputStream.readBytes
-   7  1.18% 96.82%     314 300236 java.util.HashMap.get
-   8  0.84% 97.66%     225 300233 java.util.Arrays.copyOf
-   9  0.72% 98.38%     192 300223 AntColony$Ant.pathProb
-  10  0.48% 98.85%     127 300232 java.util.ArrayList.iterator
-  11  0.17% 99.03%      46 300231 AntColony$Ant.findNext
-  12  0.12% 99.15%      32 300235 java.util.HashMap.hash
-  13  0.12% 99.26%      31 300237 AntColony$Ant.pathProb
-  14  0.11% 99.37%      29 300248 java.lang.Integer.valueOf
-  15  0.07% 99.45%      20 300245 AntColony$Ant.findNext
-  16  0.07% 99.52%      19 300239 java.lang.Integer.valueOf
-  17  0.06% 99.58%      17 300244 java.util.Random.nextDouble
-  18  0.05% 99.63%      13 300224 AntColony$Ant.makeTrip
-  19  0.04% 99.67%      11 300240 java.util.HashMap.getNode
-  20  0.03% 99.70%       8 300247 java.util.HashMap.getNode
-  21  0.02% 99.72%       6 300215 java.util.ArrayList.ensureExplicitCapacity
-  22  0.02% 99.75%       6 300242 java.util.HashMap.get
-  23  0.02% 99.76%       5 300234 AntColony$Ant.makeTrip
-  24  0.02% 99.78%       5 300228 java.util.HashMap.containsKey
-  25  0.01% 99.80%       4 300220 AntColony$Ant.findNext
-  26  0.01% 99.81%       4 300243 AntColony$Ant.makeTrip
-  27  0.01% 99.82%       3 300256 java.util.HashMap.get
-  28  0.01% 99.84%       3 300218 AntColony.pow
-  29  0.01% 99.85%       3 300255 AntColony.fillDistsMatrix
+   1 83.88% 83.88%  206669 300209 java.io.FileInputStream.readBytes
+   2 15.41% 99.30%   37973 300225 AntColony$Ant.makeTrip
+   3  0.58% 99.87%    1422 300223 AntColony$Ant.findNext
+   4  0.04% 99.92%     106 300237 AntColony.solveProblem
+   5  0.03% 99.94%      68 300227 AntColony$Ant.findNext
+   6  0.02% 99.96%      46 300239 AntColony.solveProblem
 CPU SAMPLES END

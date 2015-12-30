@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.params=args
 comment0.target=void\ main(java.lang.String[])
-comment1.params=indices\ problems
-comment1.target=java.util.ArrayList\ indicesToPoints(int[][],\ java.util.ArrayList)
+comment1.params=s
+comment1.target=java.util.ArrayList\ strToIntList(java.lang.String)
 numComments=2

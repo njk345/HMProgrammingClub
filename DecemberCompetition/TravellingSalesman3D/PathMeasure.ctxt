@@ -1,6 +1,12 @@
 #BlueJ class context
 comment0.params=solutions
 comment0.target=int\ evalAlgLen(java.util.ArrayList)
-comment1.params=points\ before\ after
-comment1.target=double\ evalPathLen(java.util.ArrayList,\ Point,\ Point)
-numComments=2
+comment1.params=points\ before\ after\ pNum\ distances
+comment1.target=double\ evalPathLen(java.util.ArrayList,\ Point,\ Point,\ int,\ double[][])
+comment2.params=indices\ isAntColony
+comment2.target=java.util.ArrayList\ allIndicesToPoints(int[][],\ boolean)
+comment3.params=indices\ pNum
+comment3.target=java.util.ArrayList\ indicesToPoints(int[],\ int)
+comment4.params=dists\ pNum
+comment4.target=void\ fillDistsMatrix(double[][],\ int)
+numComments=5
