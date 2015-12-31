@@ -124,7 +124,7 @@ public class AntColony
 
         private int findNext(double[][] pheromones) {
             //load the array of probabilities to go to non-visited points
-            double[] probs = new double[dists[0].length];
+            double[] probs = new double[dists.length];
             double probTot = 0;
             for (int i = 0; i < dists.length; i++) {
                 if (!visited[i]) {

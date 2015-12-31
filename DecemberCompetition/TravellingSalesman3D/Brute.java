@@ -69,7 +69,7 @@ public class Brute
         ArrayList<Point> bestPath = null;
         for (int i = 0; i < pCombs.size(); i++)
         {
-            double len = PathMeasure.evalPathLen(pCombs.get(i), pStart, pBefore, pNum, dists);
+            double len = PathMeasure.evalPathLen(pCombs.get(i), pStart, pBefore, dists);
             if (len < bestLen)
             {
                 bestLen = len;

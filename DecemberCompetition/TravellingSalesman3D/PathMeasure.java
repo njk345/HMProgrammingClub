@@ -8,12 +8,12 @@ public class PathMeasure
         for (int i = 0; i < solutions.size(); i++) {
             double[][] dists = new double[200][200];
             fillDistsMatrix(dists, i);
-            sum += evalPathLen(solutions.get(i), null, solutions.get(i).get(0), i, dists);
+            sum += evalPathLen(solutions.get(i), null, solutions.get(i).get(0), dists);
         }
         return (int)sum;
     }
 
-    public static double evalPathLen(ArrayList<Point> points, Point before, Point after, int pNum, double[][] distances) {
+    public static double evalPathLen(ArrayList<Point> points, Point before, Point after, double[][] distances) {
         double sum = 0;
         for (int i = 0; i < points.size() - 1; i++) {
             sum += distances[points.get(i).index][points.get(i+1).index];
@@ -48,6 +48,12 @@ public class PathMeasure
             rvs.add(points.get(indices[i]));
         }
         return rvs;
+    }
+    
+    public static void fillProbMatrices(double[][][] allDists, int numProbs) {
+        for (int i = 0; i < numProbs; i++) {
+            fillDistsMatrix(allDists[i], i);
+        }
     }
     
     public static void fillDistsMatrix(double[][] dists, int pNum) {

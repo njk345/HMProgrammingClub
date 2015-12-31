@@ -15,6 +15,7 @@ public class Runner {
         ArrayList<ArrayList<Point>> problems = FileUtils.getProblems();
         ArrayList<ArrayList<Point>> solutions = new ArrayList<ArrayList<Point>>();
         double[][][] dists = new double[20][200][200];
+        PathMeasure.fillProbMatrices(dists, problems.size());
 
         Scanner s = new Scanner(System.in);
         
@@ -186,7 +187,8 @@ public class Runner {
                 else {
                     System.out.print("Get High Score For Which Problem? ");
                     int prob = s.nextInt();
-                    System.out.println((int)PathMeasure.evalPathLen(acSolutions.get(prob-1), null, acSolutions.get(prob-1).get(0), prob, dists[prob-1]));
+                    
+                    System.out.println((int)PathMeasure.evalPathLen(acSolutions.get(prob-1), null, acSolutions.get(prob-1).get(0), dists[prob-1]));
                     break;
                 }
 
@@ -204,8 +206,8 @@ public class Runner {
                 default:
                 System.out.println("Invalid Algorithm Choice");
             }
-            //FileUtils.replaceAllNewBestPaths(solutions, r);
-            //bestSolutions.set(r-1, FileUtils.loadSolutions(FileUtils.algNames[r-1] + "Output.txt"));
+            FileUtils.replaceAllNewBestPaths(solutions, r);
+            bestSolutions.set(r-1, FileUtils.loadSolutions(FileUtils.algNames[r-1] + "Output.txt"));
             //FileUtils.outputSolutionsToFile("Nick Keirstead", solutions, r);
             
             s.nextLine();

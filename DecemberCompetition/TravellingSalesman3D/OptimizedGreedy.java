@@ -15,7 +15,7 @@ public class OptimizedGreedy
         ArrayList<Point> bestSolution = null;
         for (int i = 0; i < points.size(); i++) {
             ArrayList<Point> solution = Greedy.solveProblem(points, pNum, i, dists);
-            double len = PathMeasure.evalPathLen(solution, null, solution.get(0), pNum, dists);
+            double len = PathMeasure.evalPathLen(solution, null, solution.get(0), dists);
             if (len < bestDist) {
                 bestDist = len;
                 bestStart = i;
