@@ -2,7 +2,9 @@ import java.util.*;
 public class AntColony
 {
     //constants to play around with
-    public static final double alpha = 1, beta = 5, rho = 0.05, q = 1 /*, randThresh = 0.01*/;
+    public static final double alpha = 1, beta = 5, rho = 0.05, q = 1, q0 = 0.1, p0 = 0.00005;
+    /*public static final boolean nn = true;*/
+    /*public static final int nnSize = 10;*/
     
     public static Random r = new Random(1234);
 
@@ -13,9 +15,9 @@ public class AntColony
 
         for (int i = 0; i < pToSolve.size(); i++) {
             int problemNum = pToSolve.get(i) - 1;
-            solutions[problemNum] = solveProblem(problems.get(problemNum), t, a, i, dists[i]);
+            solutions[problemNum] = solveProblem(problems.get(problemNum), t, a, i, dists[problemNum]);
             System.out.println(" Solved Problem " + (problemNum + 1));
-            totLen += evalIntPathLen(solutions[problemNum], dists[i]);
+            totLen += evalIntPathLen(solutions[problemNum], dists[problemNum]);
         }
         solutions[solutions.length - 1][0] = (int)totLen;
         //stuff the length of the alg as first el of last bucket in matrix
@@ -23,10 +25,10 @@ public class AntColony
     }
 
     public static int[] solveProblem(ArrayList<Point> points, int t, int a, int pNum, double[][] dists) {
-        double[][] pheromones = new double[200][200];
-        fillMatrix(pheromones, 1);
+        double[][] globalPheromones = new double[200][200];
+        fillMatrix(globalPheromones, p0);
         Ant[] ants = new Ant[a];
-        int[] globalBest = new int[points.size()];
+        Ant allTimeBest = null;
         double globalBestLen = Double.MAX_VALUE;
 
         for (int i = 0; i < a; i++) {
@@ -34,32 +36,32 @@ public class AntColony
         }
 
         for (int i = 0; i < t; i++) {
+            //RESET EACH ANT
             for (Ant ant : ants) {
                 ant.reset();
             }
+            //EACH ANT MAKES TRIP AND STORES LOCAL PHEROMONES
             for (Ant ant : ants) {
-                ant.makeTrip(pheromones);
+                ant.makeTrip(globalPheromones);
             }
+            evapPheromones(globalPheromones);
             for (Ant ant : ants) {
-                ant.dropPheromones(pheromones, dists);
+                ant.dropPheromones(globalPheromones, false);
             }
-            evapPheromones(pheromones);
-            int[] rv = findNewGlobalBest(globalBestLen, ants, dists);
-            int[] nb = new int[rv.length];
-            for (int x = 0; x < nb.length; x++) {
-                nb[x] = rv[x];
+            Ant potentialBest = updateAllTimeBest(ants, dists, globalBestLen);
+            if (potentialBest != null) {
+                allTimeBest = potentialBest;
+                globalBestLen = evalIntPathLen(allTimeBest.getPath(), dists);
             }
-            if (nb[0] != -1) {
-                globalBest = nb;
-                globalBestLen = evalIntPathLen(globalBest, dists);
-            }
+            allTimeBest.dropPheromones(globalPheromones, true);
+
             if (t >= 1000 || a >= 1000) {
                 System.out.print("Iteration " + (i + 1) + " Done || ");
                 System.out.println("High Score = " + (int)globalBestLen);
             }
         }
         System.out.print("Length = " + (int) globalBestLen);
-        return globalBest;
+        return allTimeBest.getPath();
     }
 
     static class Ant {
@@ -94,52 +96,63 @@ public class AntColony
             return path;
         }
 
-        public void makeTrip(double[][] pheromones) {
-            int moves = 0;
+        public void makeTrip(double[][] globalPheromones) {
+            //int moves = 0;
             while (numVisited < dists.length) {
-                advancePoint(pheromones);
+                advancePoint(globalPheromones);
                 //System.out.println(moves);
-                moves++;
+                //moves++;
             }
         }
 
-        public void dropPheromones(double[][] pheromones, double[][] dists) {
-            //updates pheromones on travelled edges
-            //only to be invoked after path has been completed
-            double pAmount = q / evalIntPathLen(path, dists);
+        public void dropPheromones(double[][] pheromones, boolean isBest) {
+            double pAmount = isBest ? rho * (q / evalIntPathLen(path, dists)) : (rho * p0);
             for (int i = 0; i < path.length - 1; i++) {
                 pheromones[path[i]][path[i+1]] += pAmount;
                 pheromones[path[i+1]][path[i]] += pAmount;
             }
         }
 
-        public void advancePoint(double[][] pheromones) {
+        public void advancePoint(double[][] globalPheromones) {
             //sends ant to next point out of points, updates position, updates memory
-            int nextP = findNext(pheromones);
+            int nextP = findNext(globalPheromones);
             currPoint = nextP;
             numVisited++;
             path[numVisited-1] = currPoint;
             visited[currPoint] = true;
         }
 
-        private int findNext(double[][] pheromones) {
+        private int findNext(double[][] globalPheromones) {
             //load the array of probabilities to go to non-visited points
             double[] probs = new double[dists.length];
+            int highestProbIndex = -1;
+            double highestProb = -1;
             double probTot = 0;
             for (int i = 0; i < dists.length; i++) {
                 if (!visited[i]) {
-                    probs[i] = pathProb(i, pheromones);
+                    probs[i] = pathProb(i, globalPheromones);
                     probTot += probs[i];
+                    if (probs[i] > highestProb) {
+                        highestProb = probs[i];
+                        highestProbIndex = i;
+                    }
                 }
             }
-
+            
+            //if rand <= q0, return the max probability point
+            double rand = r.nextDouble();
+            if (rand <= q0) {
+                return highestProbIndex;
+            }
+            
+            //otherwise pick according to pseudo-random probability distribution
             for (int i = 0; i < probs.length; i++) {
                 //normalize the probabilities to be between 0 and 1
                 probs[i] /= probTot;
             }
 
             probTot = 0; //reset to build up again
-            double rand = r.nextDouble(); //between 0 and 1
+            rand = r.nextDouble(); //between 0 and 1
             for (int i = 0; i < probs.length; i++) {
                 probTot += probs[i];
                 if (probTot > rand) return i;
@@ -154,36 +167,38 @@ public class AntColony
             throw new RuntimeException("Better Not Freaking Get Here");
         }
 
-        private double pathProb(int nextPoint, double[][] pheromones) {
-            double prob = pow(pheromones[currPoint][nextPoint], alpha) * pow(1 / dists[currPoint][nextPoint], beta);
+        private double pathProb(int nextPoint, double[][] globalPheromones) {
+            double prob = pow(globalPheromones[currPoint][nextPoint], alpha) * pow(1 / dists[currPoint][nextPoint], beta);
             return prob;
         }
     }
-
-    public static int[] findNewGlobalBest (double currBest, Ant[] ants, double[][] dists) {
-        double bestLen = currBest;
-        int[] newGlobalBest = new int[ants[0].dists.length];
-        newGlobalBest[0] = -1;
-        //set first el to -1 b/c, if this is returned, I know there isn't new global best path
-        for (Ant a : ants) {
-            int[] localPath = a.getPath();
-            double localLen = evalIntPathLen(localPath, dists);
-            if (localLen < bestLen) {
-                bestLen = localLen;
-                newGlobalBest = localPath;
+    
+    public static Ant updateAllTimeBest (Ant[] ants, double[][] dists, double bestLen) {
+        Ant bestAnt = null;
+        for (int i = 0; i < ants.length; i++) {
+            double len = evalIntPathLen(ants[i].getPath(), dists);
+            if (len < bestLen) {
+                bestAnt = ants[i];
+                bestLen = len;
             }
         }
-        return newGlobalBest;
-        //if null is returned, no new global best path was found
+        return bestAnt;
     }
 
-    public static void evapPheromones(double[][] pheromones) {
-        for (int i = 0; i < pheromones.length; i++) {
-            for (int j = 0; j < pheromones[i].length; j++) {
-                pheromones[i][j] *= (1 - rho);
+    public static void evapPheromones(double[][] globalPheromones) {
+        for (int i = 0; i < globalPheromones.length; i++) {
+            for (int j = 0; j < globalPheromones[i].length; j++) {
+                globalPheromones[i][j] *= (1 - rho);
             }
         }
     }
+    
+    ////////////// PATH OPTIMIZATION SECTION
+    
+    
+    
+    
+    //////////////
 
     public static double evalIntPathLen (int[] indices, double[][] dists) {
         double len = 0;

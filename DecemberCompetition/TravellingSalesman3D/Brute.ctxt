@@ -1,12 +1,14 @@
 #BlueJ class context
-comment0.params=points\ sections\ pNum\ dists
-comment0.target=java.util.ArrayList\ bruteMultSections(java.util.ArrayList,\ java.util.ArrayList,\ int,\ double[][])
-comment1.params=points\ start\ len\ pNum\ dists
-comment1.target=java.util.ArrayList\ bruteSection(java.util.ArrayList,\ int,\ int,\ int,\ double[][])
-comment2.params=points\ pStart\ pBefore\ bruteLim\ pNum\ dists
-comment2.target=java.util.ArrayList\ bruteForce(java.util.ArrayList,\ Point,\ Point,\ int,\ int,\ double[][])
-comment3.params=list
-comment3.target=java.util.ArrayList\ listPermutations(java.util.ArrayList)
-comment4.params=n
-comment4.target=java.util.ArrayList\ indexList(int)
-numComments=5
+comment0.params=solutions\ bLim\ dists
+comment0.target=java.util.ArrayList\ fullBrute(java.util.ArrayList,\ int,\ double[][][])
+comment1.params=points\ sections\ pNum\ dists
+comment1.target=java.util.ArrayList\ bruteMultSections(java.util.ArrayList,\ java.util.ArrayList,\ int,\ double[][])
+comment2.params=points\ start\ len\ pNum\ dists
+comment2.target=java.util.ArrayList\ bruteSection(java.util.ArrayList,\ int,\ int,\ int,\ double[][])
+comment3.params=points\ pStart\ pBefore\ bruteLim\ pNum\ dists
+comment3.target=java.util.ArrayList\ bruteForce(java.util.ArrayList,\ Point,\ Point,\ int,\ int,\ double[][])
+comment4.params=list
+comment4.target=java.util.ArrayList\ listPermutations(java.util.ArrayList)
+comment5.params=n
+comment5.target=java.util.ArrayList\ indexList(int)
+numComments=6

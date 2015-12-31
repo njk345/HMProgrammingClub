@@ -1,6 +1,40 @@
 import java.util.*;
 public class Brute
 {
+    public static ArrayList<ArrayList<Point>> fullBrute(ArrayList<ArrayList<Point>> solutions, int bLim, double[][][] dists) {
+        ArrayList<ArrayList<Point>> rvs = new ArrayList<ArrayList<Point>>();
+        
+        ArrayList<ArrayList<Integer>> sections = new ArrayList<ArrayList<Integer>>();
+        //try every offset
+        int finalSectLen = -1;
+        int index = -1;
+        for (int offset = 0; offset < bLim; offset++) {
+            for (int i = 0; i < (int)((double) 200 / bLim); i++) {
+                index = i * bLim + offset;
+                if (index + bLim >= 200) {
+                    finalSectLen = 200 - index;
+                    if (index == 200) index -= bLim;
+                    break;
+                }
+                ArrayList<Integer> newSection = new ArrayList<Integer>();
+                newSection.add(index);
+                newSection.add(bLim);
+                sections.add(newSection);
+            }
+        }
+        if (index != -1) {
+            ArrayList<Integer> finalSection = new ArrayList<Integer>();
+            finalSection.add(index);
+            finalSection.add(finalSectLen);
+            sections.add(finalSection);
+        }
+        
+        for (int i = 0; i < solutions.size(); i++) {
+            rvs.add(bruteMultSections(solutions.get(i), sections, i, dists[i]));
+        }
+        return rvs;
+    }
+
     public static ArrayList<Point> bruteMultSections(ArrayList<Point> points, ArrayList<ArrayList<Integer>> sections, int pNum, double[][] dists) {
         ArrayList<Point> currSolution = new ArrayList<Point>(points);
         for (int i = 0; i < sections.size(); i++) {

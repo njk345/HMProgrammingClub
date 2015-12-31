@@ -27,16 +27,12 @@ public class PathMeasure
         return sum;
     }
     
-    public static ArrayList<ArrayList<Point>> allIndicesToPoints (int[][] indices, boolean isAntColony) {
+    public static ArrayList<ArrayList<Point>> allIndicesToPoints (int[][] indices, boolean isAntColony, double[][][] dists) {
         ArrayList<ArrayList<Point>> rvs = new ArrayList<ArrayList<Point>>();
         int lim = isAntColony? indices.length - 1 : indices.length;
         for (int i = 0; i < lim; i++) {
-            ArrayList<Point> toFill = new ArrayList<Point>();
-            ArrayList<Point> points = problems.get(i);
-            for (int j = 0; j < indices[i].length; j++) {
-                toFill.add(points.get(indices[i][j]));
-            }
-            rvs.add(points);
+            rvs.add(indicesToPoints(indices[i], i));
+            //System.out.println(AntColony.evalIntPathLen(indices[i], dists[i]));
         }
         return rvs;
     }

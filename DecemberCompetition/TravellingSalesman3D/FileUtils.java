@@ -2,9 +2,8 @@ import java.util.*;
 import java.io.*;
 public class FileUtils
 {
-    public static final String[] algNames = {"Greedy","Random","GreedyRandom","GreedyBrute",
-            "GreedyBruteRandom","OptimizedGreedy",
-            "OptimizedGreedyBrute", "AntColony"};
+    public static final String[] algNames = {"Greedy","Random","GreedyRandom", "OptimizedGreedy",
+                                             "AntColony", "ApplyFullBrute"};
     public static ArrayList<ArrayList<Point>> getProblems() {
         ArrayList<ArrayList<Point>> problems = new ArrayList<ArrayList<Point>>(0);
         for(int a = 0; a < 20; a++) {
@@ -56,33 +55,37 @@ public class FileUtils
         }
         return solutions;
     }
-    
-    public static void replaceAllNewBestPaths(ArrayList<ArrayList<Point>> solutions, int alg) {
+
+    public static void replaceAllNewBestPaths(ArrayList<ArrayList<Point>> solutions, int alg, boolean isFullBrute) {
         System.out.print("Paths Replaced: ");
         for (int i = 0; i < solutions.size(); i++) {
-            if (solutions.get(i).get(0).index != solutions.get(i).get(1).index)
-                replaceIfNewBestPath(alg, solutions.get(i), i);
+            if (solutions.get(i).get(0).index != solutions.get(i).get(1).index) {
+                replaceIfNewBestPath(alg, solutions.get(i), i, isFullBrute);
+            }
         }
         System.out.println();
     }
 
-    public static void replaceIfNewBestPath(int alg, ArrayList<Point> points, int index) {
-        ArrayList<ArrayList<Point>> currBest = loadSolutions(algNames[alg-1] + "Output.txt");
-        int currBestLen = PathMeasure.evalAlgLen(currBest);
-        //System.out.println(PathMeasure.evalPathLen(currBest.get(0), null, currBest.get(0).get(0)));
+    public static void replaceIfNewBestPath(int alg, ArrayList<Point> points, int index, boolean isFullBrute) {
+        ArrayList<ArrayList<Point>> bestSolutions = loadSolutions(algNames[alg-1] + "Output.txt");
+        ArrayList<Point> currBestPath = bestSolutions.get(index);
+        double currBestLen = PathMeasure.evalPathLen(currBestPath, null, currBestPath.get(0), Runner.dists[index]);
 
-        ArrayList<ArrayList<Point>> newSolution = new ArrayList<ArrayList<Point>>(currBest);
-        newSolution.set(index, points);
-        int newLen = PathMeasure.evalAlgLen(newSolution);
+        double newLen = PathMeasure.evalPathLen(points, null, points.get(0), Runner.dists[index]);
 
         if (newLen < currBestLen) {
-            outputSolutionsToFile("Nick Keirstead", newSolution, alg);
+            bestSolutions.set(index, points);
+            outputSolutionsToFile("Nick Keirstead", bestSolutions, alg, isFullBrute);
             System.out.print((index + 1) + " ");
         }
     }
 
-    public static void outputSolutionsToFile(String name, ArrayList<ArrayList<Point>> solutions, int alg) {
-        String opFileName = algNames[alg-1] + "Output.txt";
+    public static void outputSolutionsToFile(String name, ArrayList<ArrayList<Point>> solutions, int alg, boolean isFullBrute) {
+        String opFileName = "";
+        if (isFullBrute) {
+            opFileName += "FB";
+        }
+        opFileName += algNames[alg-1] + "Output.txt";
         String content = name+"\n";
         String path = "BestOutputs/" + opFileName;
         for(ArrayList<Point> solution : solutions) {
