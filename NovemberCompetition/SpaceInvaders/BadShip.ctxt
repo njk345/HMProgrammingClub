@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.params=kind\ x\ y
+comment0.target=BadShip(java.lang.String,\ double,\ double)
+comment1.params=
+comment1.target=int\ getTimesKilled()
+comment2.params=
+comment2.target=void\ addTimeKilled()
+comment3.params=laser
+comment3.target=Ballistic\ shoot(boolean)
+numComments=4

@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Evaluator()
+comment1.params=postfix
+comment1.target=java.lang.Double\ eval(java.util.ArrayList)
+comment2.params=op\ x
+comment2.target=java.lang.Double\ performUnaryOp(Token,\ double)
+comment3.params=op\ x\ y
+comment3.target=java.lang.Double\ performBinaryOp(Token,\ double,\ double)
+numComments=4
