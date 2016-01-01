@@ -1,0 +1,12 @@
+CASE_LO:    1
+CASE_HI:    1
+NITER:      1000
+NANTS:      10
+LEN:        200
+DIM:        3
+ALPHA:      1.0
+BETA:       5.0
+RHO:        0.1
+Q0:         0.02
+Q:          2.0
+TAU0:       0.0001
