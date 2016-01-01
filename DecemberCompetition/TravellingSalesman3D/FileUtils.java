@@ -83,9 +83,9 @@ public class FileUtils
     public static void outputSolutionsToFile(String name, ArrayList<ArrayList<Point>> solutions, int alg, boolean isFullBrute) {
         String opFileName = "";
         if (isFullBrute) {
-            opFileName += "FB";
+            opFileName = "FBAntColonyOutput.txt";
         }
-        opFileName += algNames[alg-1] + "Output.txt";
+        else opFileName += algNames[alg-1] + "Output.txt";
         String content = name+"\n";
         String path = "BestOutputs/" + opFileName;
         for(ArrayList<Point> solution : solutions) {

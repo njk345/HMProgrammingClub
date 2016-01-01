@@ -13,6 +13,8 @@ public class Runner {
         }
         ///////////////////////////////////////////////////////////////
         
+        System.out.println(PathMeasure.evalAlgLen(FileUtils.loadSolutions("FBAntColonyOutput.txt")));
+        
         ArrayList<ArrayList<Point>> problems = FileUtils.getProblems();
         ArrayList<ArrayList<Point>> solutions = new ArrayList<ArrayList<Point>>();
         
@@ -27,10 +29,14 @@ public class Runner {
             for (int i = 0; i < FileUtils.algNames.length; i++) {
                 System.out.println((i+1) + ": " + FileUtils.algNames[i]);
             }
+            for (int i = 0; i < bestSolutions.get(4).size(); i++) {
+                ArrayList<Point> thing = bestSolutions.get(4).get(i);
+                System.out.println("Problem " + (i+1) + ": " + (int)PathMeasure.evalPathLen(thing, null, thing.get(0), dists[i]));
+            }
             int r = s.nextInt();
             int bLim; //not always used
             
-            if (r < bestSolutions.size()) {
+            if (r != 6) {
                 System.out.println("Curr Best Stored Distance = " + PathMeasure.evalAlgLen(bestSolutions.get(r-1)));
             }
             boolean doReplace = true;
@@ -183,13 +189,13 @@ public class Runner {
                 default:
                 System.out.println("Invalid Algorithm Choice");
             }
-            if (doReplace) {
+            if (doReplace && !isFullBrute) {
                 FileUtils.replaceAllNewBestPaths(solutions, r, isFullBrute);
-                if (!isFullBrute) {
-                    bestSolutions.set(r-1, FileUtils.loadSolutions(FileUtils.algNames[r-1] + "Output.txt"));
-                }
+                bestSolutions.set(r-1, FileUtils.loadSolutions(FileUtils.algNames[r-1] + "Output.txt"));
             }
-            //FileUtils.outputSolutionsToFile("Nick Keirstead", solutions, r, isFullBrute);
+            if (isFullBrute) {
+                FileUtils.outputSolutionsToFile("Nick Keirstead", solutions, 99, true);
+            }
             
             s.nextLine();
             System.out.print("\nContinue (y/n)? ");

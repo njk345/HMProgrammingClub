@@ -2,11 +2,10 @@ import java.util.*;
 public class AntColony
 {
     //constants to play around with
-    public static final double alpha = 1, beta = 5, rho = 0.05, q = 1, q0 = 0.1, p0 = 0.00005;
-    /*public static final boolean nn = true;*/
-    /*public static final int nnSize = 10;*/
+    public static final double alpha = 1, beta = 5, rho = 0.05, q = 2, q0 = 0.01, p0 = 0.00005;
     
-    public static Random r = new Random(1234);
+    public static Random daddyR = new Random(1234);
+    public static Random r = new Random(daddyR.nextInt(1234));
 
     public static int[][] solveAllProblems(ArrayList<ArrayList<Point>> problems, int t, int a, ArrayList<Integer> pToSolve, double[][][] dists) {
         double totLen = 0;
@@ -28,11 +27,11 @@ public class AntColony
         double[][] globalPheromones = new double[200][200];
         fillMatrix(globalPheromones, p0);
         Ant[] ants = new Ant[a];
-        Ant allTimeBest = null;
+        int[] allTimeBestPath = new int[dists.length];
         double globalBestLen = Double.MAX_VALUE;
 
         for (int i = 0; i < a; i++) {
-            ants[i] = new Ant(dists);
+            ants[i] = new Ant(dists, r.nextInt(dists.length));
         }
 
         for (int i = 0; i < t; i++) {
@@ -40,28 +39,29 @@ public class AntColony
             for (Ant ant : ants) {
                 ant.reset();
             }
-            //EACH ANT MAKES TRIP AND STORES LOCAL PHEROMONES
+            //EACH ANT MAKES TRIP
             for (Ant ant : ants) {
                 ant.makeTrip(globalPheromones);
+                bruteAll(ant.getPath(), dists);
             }
             evapPheromones(globalPheromones);
             for (Ant ant : ants) {
-                ant.dropPheromones(globalPheromones, false);
+                ant.dropPheromones(globalPheromones);
             }
-            Ant potentialBest = updateAllTimeBest(ants, dists, globalBestLen);
+            int[] potentialBest = updateAllTimeBest(ants, dists, globalBestLen);
             if (potentialBest != null) {
-                allTimeBest = potentialBest;
-                globalBestLen = evalIntPathLen(allTimeBest.getPath(), dists);
+                globalBestLen = evalIntPathLen(potentialBest, dists);
+                for (int j = 0; j < potentialBest.length; j++) {
+                    allTimeBestPath[j] = potentialBest[j];
+                }
             }
-            allTimeBest.dropPheromones(globalPheromones, true);
+            bestDropPheromones(globalPheromones, allTimeBestPath, globalBestLen);
 
-            if (t >= 1000 || a >= 1000) {
-                System.out.print("Iteration " + (i + 1) + " Done || ");
-                System.out.println("High Score = " + (int)globalBestLen);
-            }
+            System.out.print("Iteration " + (i + 1) + " Done || ");
+            System.out.println("High Score = " + (int)globalBestLen);
         }
         System.out.print("Length = " + (int) globalBestLen);
-        return allTimeBest.getPath();
+        return allTimeBestPath;
     }
 
     static class Ant {
@@ -70,8 +70,10 @@ public class AntColony
         int numVisited;
         boolean[] visited;
         double[][] dists;
+        int start;
 
-        public Ant(double[][] dists) {
+        public Ant(double[][] dists, int start) {
+            this.start = start;
             path = new int[dists.length];
             visited = new boolean[dists.length];
             this.dists = dists;
@@ -85,7 +87,7 @@ public class AntColony
                 //reset to meaningless path
                 path[i] = -1;
             }
-            currPoint = r.nextInt(dists.length - 1);
+            currPoint = start;
             visited[currPoint] = true;
             path[0] = currPoint;
             numVisited = 1;
@@ -105,12 +107,13 @@ public class AntColony
             }
         }
 
-        public void dropPheromones(double[][] pheromones, boolean isBest) {
-            double pAmount = isBest ? rho * (q / evalIntPathLen(path, dists)) : (rho * p0);
+        public void dropPheromones(double[][] pheromones) {
+            double pAmount = rho * p0;
             for (int i = 0; i < path.length - 1; i++) {
                 pheromones[path[i]][path[i+1]] += pAmount;
                 pheromones[path[i+1]][path[i]] += pAmount;
             }
+            pheromones[path.length - 1][path[0]] += pAmount;
         }
 
         public void advancePoint(double[][] globalPheromones) {
@@ -162,6 +165,7 @@ public class AntColony
             //causes the rand to be greater than every probability
             //THIS IS SUPER SUPER SUPER RARE, so just return any valid point
             for (int i = 0; i < dists.length; i++) {
+                System.out.println("Never Happens");
                 if (!visited[i]) return i;
             }
             throw new RuntimeException("Better Not Freaking Get Here");
@@ -173,16 +177,26 @@ public class AntColony
         }
     }
     
-    public static Ant updateAllTimeBest (Ant[] ants, double[][] dists, double bestLen) {
-        Ant bestAnt = null;
+    public static void bestDropPheromones(double[][] pher, int[] bestPath, double bestLen) {
+        double pAmount = rho * (q / bestLen);
+        for (int i = 0; i < bestPath.length - 1; i++) {
+            pher[bestPath[i]][bestPath[i+1]] += pAmount;
+            pher[bestPath[i+1]][bestPath[i]] += pAmount;
+        }
+        pher[bestPath[bestPath.length-1]][bestPath[0]] += pAmount;
+    }
+    
+    public static int[] updateAllTimeBest (Ant[] ants, double[][] dists, double bestLen) {
+        int[] bestPath = null;
         for (int i = 0; i < ants.length; i++) {
+            int[] localPath = ants[i].getPath();
             double len = evalIntPathLen(ants[i].getPath(), dists);
             if (len < bestLen) {
-                bestAnt = ants[i];
+                bestPath = localPath;
                 bestLen = len;
             }
         }
-        return bestAnt;
+        return bestPath;
     }
 
     public static void evapPheromones(double[][] globalPheromones) {
@@ -194,12 +208,70 @@ public class AntColony
     }
     
     ////////////// PATH OPTIMIZATION SECTION
+    public static int bruteLim = 5;
     
+    public static void bruteAll(int[] path, double[][] dists) {
+        int i = 0;
+        for ( ; i < dists.length - bruteLim; i+=bruteLim) {
+            brute(path, dists, i, bruteLim);
+        }
+        int leftOver = dists.length - i;
+        brute(path, dists, i, leftOver);
+    }
     
+    public static void brute(int[] path, double[][] dists, int start, int bSize) {
+        ArrayList<Integer> section = new ArrayList<Integer>(bSize);
+        for (int i = start; i < start + bSize; i++) {
+            section.add(path[i]);
+        }
+        
+        ArrayList<ArrayList<Integer>> perms = Brute.listPermutations(new ArrayList<Integer>(section));
+        ArrayList<Integer> bestSection = null;
+        int before = start == 0? -1 : start - 1;
+        int after = (start + bSize == 200)? path[0] : start + bSize;
+        
+        double bestLen = evalIntPathLen(section, dists, before, after);
+        for (int i = 0; i < perms.size(); i++) {
+            ArrayList<Integer> sect = perms.get(i);
+            double len = evalIntPathLen(sect, dists, before, after);
+            if (len < bestLen) {
+                bestLen = len;
+                bestSection = sect;
+            }
+        }
+        if (bestSection != null) {
+            //reconstruct path with newly-arranged section
+            int[] newPath = new int[path.length];
+            int i = 0;
+            for ( ; i < start; i++) {
+                newPath[i] = path[i];
+            }
+            for ( ; i < start + bSize; i++) {
+                newPath[i] = bestSection.get(i - start);
+            }
+            for ( ; i < path.length; i++) {
+                newPath[i] = path[i];
+            }
+            path = newPath;
+        }
+    }
     
     
     //////////////
 
+    public static double evalIntPathLen (ArrayList<Integer> indices, double[][] dists, int before, int after) {
+        double len = 0;
+        for (int i = 0; i < indices.size() - 1; i++) {
+            len += dists[indices.get(i)][indices.get(i+1)];
+        }
+        if (before != -1) {
+            len += dists[indices.get(0)][before];
+        }
+        if (after != -1) {
+            len += dists[indices.get(indices.size() - 1)][after];
+        }
+        return len;
+    }
     public static double evalIntPathLen (int[] indices, double[][] dists) {
         double len = 0;
         for (int i = 0; i < indices.length - 1; i++) {
