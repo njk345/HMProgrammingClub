@@ -1,4 +1,8 @@
 #BlueJ class context
 comment0.params=args
 comment0.target=void\ main(java.lang.String[])
-numComments=1
+comment1.params=alg
+comment1.target=void\ printCurrBestScore(int)
+comment2.params=
+comment2.target=void\ displayAlgChoices()
+numComments=3

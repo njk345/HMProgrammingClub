@@ -2,7 +2,8 @@ import java.util.*;
 public class Score
 {
     //size is the number of names to sort into rooms
-    public static final int size = 5000;
+    public static final int totSize = 5000;
+    public static final int minRoomSize = 4;
     
     //returns the score for an entire solution
     public static int scoreProblem(ArrayList<ArrayList<String>> solution) {
@@ -10,8 +11,8 @@ public class Score
         for (ArrayList<String> room : solution) {
             totPeople += room.size();
         }
-        if (totPeople != size) {
-            String message = totPeople < size? "Not enough people assigned" : "Too many people assigned";
+        if (totPeople != totSize) {
+            String message = totPeople < totSize? "Not enough people assigned" : "Too many people assigned";
             throw new RuntimeException(message);
         }
         if (containsDuplicates(solution)) {
@@ -27,11 +28,10 @@ public class Score
 
     //returns the score for a single room
     public static int scoreRoom(ArrayList<String> room) {
-        if (room.size() < 2) {
+        if (room.size() < minRoomSize) {
             throw new RuntimeException("Room Has Only " + room.size() + " People");
         }
-        int commonLetters = commonChars(room);
-        return commonLetters * room.size() * room.size();
+        return commonChars(room);
     }
 
     //returns how many times any character appears in each string of a given list of strings
@@ -66,6 +66,7 @@ public class Score
 		return tot;
 	}
 
+	//returns whether a given solution contains any name more than once
     public static boolean containsDuplicates(ArrayList<ArrayList<String>> solution) {
         HashMap<String, Integer> names = new HashMap<String, Integer>();
         int totNames = 0;

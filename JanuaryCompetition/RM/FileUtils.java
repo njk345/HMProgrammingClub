@@ -9,15 +9,18 @@ import java.util.*;
 
 public class FileUtils {
     public static final int size = 5000;
+    public static final String probFileName = "input.txt";
+    public static final String myName = "Nick Keirstead";
+    public static final String[] algNames = {"Random", "RandomLooping"};
 
-    public static ArrayList<String> getProblem(String filename)
+    public static ArrayList<String> getProblem()
     {
         String line = null;
 
         try {
             // FileReader reads text files in the default encoding.
             FileReader fileReader = 
-                new FileReader(filename);
+                new FileReader(probFileName);
 
             // Always wrap FileReader in BufferedReader.
             BufferedReader bufferedReader = 
@@ -36,29 +39,29 @@ public class FileUtils {
         catch(FileNotFoundException ex) {
             System.out.println(
                 "Unable to open file '" + 
-                filename + "'");                
+                probFileName + "'");                
         }
         catch(IOException ex) {
             System.out.println(
                 "Error reading file '" 
-                + filename + "'");                  
+                + probFileName + "'");                  
             // Or we could just do this: 
             // ex.printStackTrace();
         }
         return null;
     }
-    
+
     public static ArrayList<ArrayList<String>> loadSolution(String filename) {
         ArrayList<ArrayList<String>> solution = new ArrayList<ArrayList<String>>();
         try {
             // FileReader reads text files in the default encoding.
             FileReader fileReader = 
-                new FileReader(filename);
+                new FileReader("BestOutputs/" + filename);
 
             // Always wrap FileReader in BufferedReader.
             BufferedReader bufferedReader = 
                 new BufferedReader(fileReader);
-            
+
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 ArrayList<String> room = new ArrayList<String>();
@@ -68,15 +71,13 @@ public class FileUtils {
                 }
                 solution.add(room);
             }
-            
+
             bufferedReader.close();   
 
             return solution;
         }
         catch(FileNotFoundException ex) {
-            System.out.println(
-                "Unable to open file '" + 
-                filename + "'");                
+            return null;              
         }
         catch(IOException ex) {
             System.out.println(
@@ -88,9 +89,25 @@ public class FileUtils {
         return null;
     }
 
-    public static void output(String name, ArrayList<ArrayList<String>> solution) {
+    public static void outputIfBest(String name, ArrayList<ArrayList<String>> solution, int alg) {
+        ArrayList<ArrayList<String>> currBest = null;
+        currBest = loadSolution(algNames[alg-1] + "_Out.txt");
+        if (currBest == null) {
+            //output unconditionally if no exisiting solution
+            output(name, solution, alg);
+        }
+        else {
+            int currBestScore = Score.scoreProblem(currBest);
+            int inputScore = Score.scoreProblem(solution);
+            if (inputScore > currBestScore) {
+                output(name, solution, alg);
+            }
+        }
+    }
+
+    public static void output(String name, ArrayList<ArrayList<String>> solution, int alg) {
         PrintWriter writer;
-        String filename = name + System.currentTimeMillis() + ".txt";
+        String filename = "BestOutputs/" + algNames[alg-1] + "_Out.txt";
         try {
             writer = new PrintWriter(filename, "UTF-8");
             int index = 0;
@@ -111,5 +128,6 @@ public class FileUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("Uploaded " + algNames[alg-1] + " Solution To File");
     }
 }

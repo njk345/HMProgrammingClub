@@ -1,8 +1,10 @@
 #BlueJ class context
-comment0.params=filename
-comment0.target=java.util.ArrayList\ getProblem(java.lang.String)
+comment0.params=
+comment0.target=java.util.ArrayList\ getProblem()
 comment1.params=filename
 comment1.target=java.util.ArrayList\ loadSolution(java.lang.String)
-comment2.params=name\ solution
-comment2.target=void\ output(java.lang.String,\ java.util.ArrayList)
-numComments=3
+comment2.params=name\ solution\ alg
+comment2.target=void\ outputIfBest(java.lang.String,\ java.util.ArrayList,\ int)
+comment3.params=name\ solution\ alg
+comment3.target=void\ output(java.lang.String,\ java.util.ArrayList,\ int)
+numComments=4
