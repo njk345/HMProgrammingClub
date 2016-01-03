@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.params=solution
+comment0.target=int\ scoreProblem(java.util.ArrayList)
+comment1.params=room
+comment1.target=int\ scoreRoom(java.util.ArrayList)
+comment2.params=names
+comment2.target=int\ commonChars(java.util.ArrayList)
+comment3.params=solution
+comment3.target=boolean\ containsDuplicates(java.util.ArrayList)
+numComments=4
