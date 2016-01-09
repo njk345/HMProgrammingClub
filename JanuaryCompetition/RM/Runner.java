@@ -12,6 +12,7 @@ public class Runner
         
         while (again) {
             System.out.println("\f");
+            System.out.println("Pick an Algorithm: ");
             displayAlgChoices();
             
             int algChoice = s.nextInt();
@@ -33,13 +34,38 @@ public class Runner
                 solution = Rand.loopSolve(problem, rSize, target);
                 break;
                 
+                case 3:
+                solution = SimpleSort.solve(problem);
+                break;
+                
+                case 4:
+                System.out.print("Go for How Many Minutes? ");
+                int maxMin = s.nextInt();
+                System.out.print("How many Iterations per Iteration? ");
+                int itPerIt = s.nextInt();
+                ArrayList<ArrayList<String>> starter = SimpleSort.solve(problem);
+                solution = SimAnneal.solve(starter, maxMin, itPerIt);
+                
+                break;
+                
+                case 5:
+                System.out.println("Perform Opt on which Algorithm Ouput? ");
+                displayAlgChoices();
+                int a = s.nextInt();
+                algChoice = a;
+                printCurrBestScore(a);
+                ArrayList<ArrayList<String>> curr = FileUtils.loadSolution(FileUtils.algNames[a]+"_Out.txt");
+                Opt.shuffleBad(curr, 1);
+                break;
+                
                 default:
                 System.out.println("Invalid Algorithm Choice");
             }
             int score = Score.scoreProblem(solution);
             System.out.println("Overall Score = " + score);
  
-            FileUtils.outputIfBest(myName, solution, algChoice);
+            FileUtils.output(myName, solution, -1);
+            //FileUtils.outputIfBest(myName, solution, algChoice);
             s.nextLine();
             System.out.print("Go Again (y/n)? ");
             again = s.nextLine().toLowerCase().equals("y");
@@ -55,7 +81,6 @@ public class Runner
         }
     }
     public static void displayAlgChoices() {
-        System.out.println("Pick an Algorithm:");
         for (int i = 0; i < FileUtils.algNames.length; i++) {
             System.out.println((i+1) + ": " + FileUtils.algNames[i]);
         }

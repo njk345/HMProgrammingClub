@@ -1,0 +1,10 @@
+To Run The Program:
+
+(if not using some IDE with java support)
+
+from command line, type:  java Chmod
+(Chmod is the name of the program, not the unix keyword)
+
+Then just type in the 4 input numbers for each of the 5 prompts,
+pressing enter at end of each line, and the program will output
+the 5 solutions.

@@ -11,7 +11,8 @@ public class FileUtils {
     public static final int size = 5000;
     public static final String probFileName = "input.txt";
     public static final String myName = "Nick Keirstead";
-    public static final String[] algNames = {"Random", "RandomLooping"};
+    public static final String[] algNames = {"Random", "RandomLooping", "SimpleSort",
+                                             "Simulated Annealing", "Opt"};
 
     public static ArrayList<String> getProblem()
     {
@@ -107,7 +108,11 @@ public class FileUtils {
 
     public static void output(String name, ArrayList<ArrayList<String>> solution, int alg) {
         PrintWriter writer;
-        String filename = "BestOutputs/" + algNames[alg-1] + "_Out.txt";
+        String filename;
+        if (alg == -1) {
+            filename = "Tester.txt";
+        }
+        else filename = "BestOutputs/" + algNames[alg-1] + "_Out.txt";
         try {
             writer = new PrintWriter(filename, "UTF-8");
             int index = 0;
@@ -128,6 +133,6 @@ public class FileUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Uploaded " + algNames[alg-1] + " Solution To File");
+        if (alg != -1) System.out.println("Uploaded " + algNames[alg-1] + " Solution To File");
     }
 }

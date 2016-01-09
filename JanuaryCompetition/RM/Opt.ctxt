@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.params=solution\ min
+comment0.target=java.util.ArrayList\ badRooms(java.util.ArrayList,\ int)
+comment1.params=sol\ min
+comment1.target=java.util.ArrayList\ shuffleBad(java.util.ArrayList,\ int)
+comment2.params=r1\ r2
+comment2.target=int[]\ getBestSwap(java.util.ArrayList,\ java.util.ArrayList)
+comment3.params=r1\ r2\ a\ b
+comment3.target=void\ swap(java.util.ArrayList,\ java.util.ArrayList,\ int,\ int)
+numComments=4
