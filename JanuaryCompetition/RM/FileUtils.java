@@ -44,7 +44,7 @@ public class FileUtils {
         }
         catch(IOException ex) {
             System.out.println(
-                "Error reading file '" 
+                "Error reading file" 
                 + probFileName + "'");                  
             // Or we could just do this: 
             // ex.printStackTrace();
@@ -57,7 +57,7 @@ public class FileUtils {
         try {
             // FileReader reads text files in the default encoding.
             FileReader fileReader = 
-                new FileReader("BestOutputs/" + filename);
+                new FileReader("Outputs/" + filename);
 
             // Always wrap FileReader in BufferedReader.
             BufferedReader bufferedReader = 
@@ -112,7 +112,7 @@ public class FileUtils {
         if (alg == -1) {
             filename = "Tester.txt";
         }
-        else filename = "BestOutputs/" + algNames[alg-1] + "_Out.txt";
+        else filename = "Outputs/" + algNames[alg-1] + "_Out.txt";
         try {
             writer = new PrintWriter(filename, "UTF-8");
             int index = 0;
@@ -134,5 +134,30 @@ public class FileUtils {
             e.printStackTrace();
         }
         if (alg != -1) System.out.println("Uploaded " + algNames[alg-1] + " Solution To File");
+    }
+    public static void outputTemperature(double t) {
+        try {
+            PrintWriter w = new PrintWriter("Outputs/AnnealTemp.txt", "UTF-8");
+            w.print(t);
+            w.close();
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
+    }
+    public static double loadTemperature() {
+        double rv;
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader("Outputs/AnnealTemp.txt"));
+            rv = Double.parseDouble(br.readLine());
+            return rv;
+        } catch (NumberFormatException e) {
+            System.out.println("For some reason, the number in AnnealTemp.txt is not a double...");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }

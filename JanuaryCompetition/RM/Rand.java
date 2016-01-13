@@ -3,10 +3,8 @@ public class Rand
 {
     public static Random r = new Random();
     public static final String myName = "Nick Keirstead";
-    public static ArrayList<ArrayList<String>> solve (ArrayList<String> problem, int roomSize) {
-        if (problem.size() % roomSize != 0) {
-            throw new RuntimeException("Cannot Do Random With Room Size " + roomSize);
-        }
+    public static final int roomSize = 4;
+    public static ArrayList<ArrayList<String>> solve (ArrayList<String> problem) {
         ArrayList<String> probCopy = new ArrayList<String>(problem);
         ArrayList<ArrayList<String>> solution = new ArrayList<ArrayList<String>>();
         while (probCopy.size() > 0) {
@@ -20,11 +18,11 @@ public class Rand
         }
         return solution;
     }
-    public static ArrayList<ArrayList<String>> loopSolve (ArrayList<String> problem, int roomSize, int target) {
+    public static ArrayList<ArrayList<String>> loopSolve (ArrayList<String> problem, int target) {
         int bestScore = -1;
         ArrayList<ArrayList<String>> bestSolution = null;
         while (bestScore < target) {
-            ArrayList<ArrayList<String>> solution = solve(problem, roomSize);
+            ArrayList<ArrayList<String>> solution = solve(problem);
             int currScore = Score.scoreProblem(solution);
             if (currScore > bestScore) {
                 bestScore = currScore;

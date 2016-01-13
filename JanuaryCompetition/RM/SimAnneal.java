@@ -3,11 +3,13 @@ public class SimAnneal
 {
     public static Random r = new Random();
     public static final double startTemp = 50;
-    public static final double tempFactor = 0.95;
-    public static ArrayList<ArrayList<String>> solve(ArrayList<ArrayList<String>> input, int maxMin, int itPerIt) {
+    public static final double tempFactor = 0.96;
+    public static final int saveRate = 5000;
+    public static ArrayList<ArrayList<String>> solve(ArrayList<ArrayList<String>> input, double maxMin, int itPerIt) {
         ArrayList<ArrayList<String>> solution = new ArrayList<ArrayList<String>>(input);
-        int bestScore = Score.scoreProblem(solution);
-        double t = startTemp;
+        int currBest = Score.scoreProblem(solution);
+        int saveThreshold = Score.scoreProblem(FileUtils.loadSolution("Simulated Annealing_Out.txt"));
+        double t = startTemp; //could also load temp stored in file, but makes it slower for some reason
         long startTime = System.currentTimeMillis();
         int iter = 0;
         while (true) {
@@ -16,45 +18,55 @@ public class SimAnneal
             if ((double)(currTime - startTime) / 60000 >= maxMin) {
                 break;
             }
+            //this if statement slows things down considerably
+            /*if (currBest > saveThreshold && currTime % saveRate == 0) {
+                FileUtils.output("Nick Keirstead", solution, 4);
+            }*/
          
+            //store the best overall swap from the inner loop
             int[] bestSwap = new int[4];
             int bestSwapScore = -1;
             for (int i = 0; i < itPerIt; i++) {
                 int[] toSwap = swapRandom(solution);
+                int currSubScore = Score.scoreRoom(solution.get(toSwap[0])) + Score.scoreRoom(solution.get(toSwap[1]));
                 
-                ArrayList<ArrayList<String>> copy = new ArrayList<ArrayList<String>>(solution);
-                int currScore = Score.commonChars(solution.get(toSwap[0])) + Score.commonChars(solution.get(toSwap[1]));
+                swap(solution.get(toSwap[0]), solution.get(toSwap[1]), toSwap[2], toSwap[3]);
                 
-                swap(copy.get(toSwap[0]), copy.get(toSwap[1]), toSwap[2], toSwap[3]);
+                int swapScore = Score.scoreRoom(solution.get(toSwap[0])) + Score.scoreRoom(solution.get(toSwap[1]));
+                int newOverall = currBest - currSubScore + swapScore;
                 
-                int swapScore = Score.commonChars(copy.get(toSwap[0])) + Score.commonChars(copy.get(toSwap[1]));
-                int newOverall = bestScore - currScore + swapScore;
                 if (newOverall > bestSwapScore) {
+                    //take note of new best swap
                     bestSwapScore = newOverall;
                     bestSwap[0] = toSwap[0];
                     bestSwap[1] = toSwap[1];
                     bestSwap[2] = toSwap[2];
                     bestSwap[3] = toSwap[3];
                 }
+                //always swap back
+                swap(solution.get(toSwap[0]), solution.get(toSwap[1]), toSwap[2], toSwap[3]);
             }
             
-            if (bestSwapScore > bestScore) {
+            if (bestSwapScore >= currBest) {
                 //definitely accept
-                bestScore = bestSwapScore;
+                currBest = bestSwapScore;
                 swap(solution.get(bestSwap[0]), solution.get(bestSwap[1]), bestSwap[2], bestSwap[3]);
-                System.out.println("Iteration " + (iter+1) + ": Score = " + bestScore);
+                System.out.println("Iteration " + (iter+1) + ": Score = " + currBest);
             }
             else {
-                double p = prob(bestScore, bestSwapScore, t);
+                double p = prob(currBest, bestSwapScore, t);
                 double rand = r.nextDouble();
                 if (p >= rand) {
                     //accept with probability p
-                    bestScore = bestSwapScore;
+                    currBest = bestSwapScore;
                     swap(solution.get(bestSwap[0]), solution.get(bestSwap[1]), bestSwap[2], bestSwap[3]);
-                    System.out.println("Iteration " + (iter+1) + ": Score = " + bestScore);
+                    System.out.println("Iteration " + (iter+1) + ": Score = " + currBest);
                 }
             }
             t *= tempFactor;
+        }
+        if (currBest > saveThreshold) {
+            FileUtils.outputTemperature(t);
         }
         return solution;
     }

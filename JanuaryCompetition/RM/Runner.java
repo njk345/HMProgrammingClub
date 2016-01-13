@@ -21,17 +21,13 @@ public class Runner
             printCurrBestScore(algChoice);
             switch (algChoice) {
                 case 1:
-                System.out.print("Pick a RoomSize (Factor of 5000): ");
-                rSize = s.nextInt();
-                solution = Rand.solve(problem, rSize);
+                solution = Rand.solve(problem);
                 break;
                 
                 case 2:
-                System.out.print("Pick a RoomSize (Factor of 5000): ");
-                rSize = s.nextInt();
                 System.out.print("Go Until Reached What Score? ");
                 int target = s.nextInt();
-                solution = Rand.loopSolve(problem, rSize, target);
+                solution = Rand.loopSolve(problem, target);
                 break;
                 
                 case 3:
@@ -40,12 +36,11 @@ public class Runner
                 
                 case 4:
                 System.out.print("Go for How Many Minutes? ");
-                int maxMin = s.nextInt();
+                double maxMin = s.nextDouble();
                 System.out.print("How many Iterations per Iteration? ");
                 int itPerIt = s.nextInt();
-                ArrayList<ArrayList<String>> starter = SimpleSort.solve(problem);
+                ArrayList<ArrayList<String>> starter = FileUtils.loadSolution("Simulated Annealing_Out.txt");
                 solution = SimAnneal.solve(starter, maxMin, itPerIt);
-                
                 break;
                 
                 case 5:
@@ -54,8 +49,11 @@ public class Runner
                 int a = s.nextInt();
                 algChoice = a;
                 printCurrBestScore(a);
-                ArrayList<ArrayList<String>> curr = FileUtils.loadSolution(FileUtils.algNames[a]+"_Out.txt");
-                Opt.shuffleBad(curr, 1);
+                System.out.print("Min? ");
+                int m = s.nextInt();
+                solution = FileUtils.loadSolution(FileUtils.algNames[a-1]+"_Out.txt");
+                //NO OPT ALGORITHMS TO RUN RIGHT NOW
+
                 break;
                 
                 default:
@@ -64,8 +62,7 @@ public class Runner
             int score = Score.scoreProblem(solution);
             System.out.println("Overall Score = " + score);
  
-            FileUtils.output(myName, solution, -1);
-            //FileUtils.outputIfBest(myName, solution, algChoice);
+            FileUtils.outputIfBest(myName, solution, algChoice);
             s.nextLine();
             System.out.print("Go Again (y/n)? ");
             again = s.nextLine().toLowerCase().equals("y");
