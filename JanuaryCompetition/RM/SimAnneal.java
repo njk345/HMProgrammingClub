@@ -5,6 +5,10 @@ public class SimAnneal
     public static final double startTemp = 50;
     public static final double tempFactor = 0.96;
     public static final int saveRate = 5000;
+    public static final int maxIterNoImprov = 50000;
+    public static final double minTemp = .0001;
+    public static final double tolerance = .0001;
+    public static final double randTarget = 0.05;
     public static ArrayList<ArrayList<String>> solve(ArrayList<ArrayList<String>> input, double maxMin, int itPerIt) {
         ArrayList<ArrayList<String>> solution = new ArrayList<ArrayList<String>>(input);
         int currBest = Score.scoreProblem(solution);
@@ -12,6 +16,7 @@ public class SimAnneal
         double t = startTemp; //could also load temp stored in file, but makes it slower for some reason
         long startTime = System.currentTimeMillis();
         int iter = 0;
+        int iterNoImprov = 0;
         while (true) {
             iter++;
             long currTime = System.currentTimeMillis();
@@ -46,12 +51,13 @@ public class SimAnneal
                 //always swap back
                 swap(solution.get(toSwap[0]), solution.get(toSwap[1]), toSwap[2], toSwap[3]);
             }
-            
-            if (bestSwapScore >= currBest) {
+            double probUncondTake = r.nextDouble();
+            if (bestSwapScore >= currBest || Math.abs(probUncondTake - randTarget) <= tolerance) {
                 //definitely accept
                 currBest = bestSwapScore;
                 swap(solution.get(bestSwap[0]), solution.get(bestSwap[1]), bestSwap[2], bestSwap[3]);
                 System.out.println("Iteration " + (iter+1) + ": Score = " + currBest);
+                iterNoImprov = 0;
             }
             else {
                 double p = prob(currBest, bestSwapScore, t);
@@ -61,13 +67,22 @@ public class SimAnneal
                     currBest = bestSwapScore;
                     swap(solution.get(bestSwap[0]), solution.get(bestSwap[1]), bestSwap[2], bestSwap[3]);
                     System.out.println("Iteration " + (iter+1) + ": Score = " + currBest);
+                    iterNoImprov = 0;
+                } else {
+                    iterNoImprov++;
                 }
             }
-            t *= tempFactor;
+            if (iterNoImprov >= maxIterNoImprov) {
+                t = startTemp;
+                iterNoImprov = 0;
+            }
+            
+            
+            if (t > minTemp) t *= tempFactor;
         }
-        if (currBest > saveThreshold) {
+        /*if (currBest > saveThreshold) {
             FileUtils.outputTemperature(t);
-        }
+        }*/
         return solution;
     }
 
@@ -81,8 +96,8 @@ public class SimAnneal
             r1 = r.nextInt(input.size());
             r2 = r.nextInt(input.size());
         }
-        int p1 = r.nextInt(input.get(r1).size());
-        int p2 = r.nextInt(input.get(r2).size());
+        int p1 = r1 % 4;
+        int p2 = r2 % 4;
         return new int[]{r1, r2, p1, p2};
     }
 

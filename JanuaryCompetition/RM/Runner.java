@@ -49,11 +49,15 @@ public class Runner
                 int a = s.nextInt();
                 algChoice = a;
                 printCurrBestScore(a);
-                System.out.print("Min? ");
-                int m = s.nextInt();
                 solution = FileUtils.loadSolution(FileUtils.algNames[a-1]+"_Out.txt");
+                int[] op = Opt.bestSwapBruted(solution);
+                System.out.println(Arrays.toString(op));
                 //NO OPT ALGORITHMS TO RUN RIGHT NOW
 
+                break;
+                
+                case 6:
+                HashSort.nameLetterFreqs(problem);
                 break;
                 
                 default:
