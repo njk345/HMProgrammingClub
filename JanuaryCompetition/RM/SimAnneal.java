@@ -3,11 +3,11 @@ public class SimAnneal
 {
     public static Random r = new Random();
     public static final double startTemp = 50;
-    public static final double tempFactor = 0.96;
+    public static final double tempFactor = 0.999;
     public static final int saveRate = 5000;
     public static final int maxIterNoImprov = 50000;
     public static final double minTemp = .0001;
-    public static final double tolerance = .0001;
+    public static final double tolerance = .0000001;
     public static final double randTarget = 0.05;
     public static ArrayList<ArrayList<String>> solve(ArrayList<ArrayList<String>> input, double maxMin, int itPerIt) {
         ArrayList<ArrayList<String>> solution = new ArrayList<ArrayList<String>>(input);

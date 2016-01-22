@@ -44,6 +44,9 @@ public class Runner
                 break;
                 
                 case 5:
+                break;
+                
+                case 6:
                 System.out.println("Perform Opt on which Algorithm Ouput? ");
                 displayAlgChoices();
                 int a = s.nextInt();
@@ -54,10 +57,6 @@ public class Runner
                 System.out.println(Arrays.toString(op));
                 //NO OPT ALGORITHMS TO RUN RIGHT NOW
 
-                break;
-                
-                case 6:
-                HashSort.nameLetterFreqs(problem);
                 break;
                 
                 default:

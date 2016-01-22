@@ -12,7 +12,7 @@ public class FileUtils {
     public static final String probFileName = "input.txt";
     public static final String myName = "Nick Keirstead";
     public static final String[] algNames = {"Random", "RandomLooping", "SimpleSort",
-                                             "Simulated Annealing", "Opt", "HashSort"};
+                                             "Simulated Annealing", "BranchBound", "Opt"};
 
     public static ArrayList<String> getProblem()
     {
