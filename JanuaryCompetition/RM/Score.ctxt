@@ -5,8 +5,7 @@ comment1.params=room
 comment1.target=int\ optCommonChars(java.util.ArrayList)
 comment2.params=room
 comment2.target=int\ scoreRoom(java.util.ArrayList)
-comment3.params=names
-comment3.target=int\ commonChars(java.util.ArrayList)
-comment4.params=solution
-comment4.target=boolean\ containsDuplicates(java.util.ArrayList)
-numComments=5
+comment3.params=solution
+comment3.target=boolean\ containsDuplicates(java.util.ArrayList)
+comment3.text=public\ static\ int\ commonChars(ArrayList<String>\ names)\ {\n\ \ \ \ \ \ \ \ ArrayList<HashMap<Character,\ Integer>>\ chars\ \=\ new\ ArrayList<HashMap<Character,\ Integer>>();\n\ \ \ \ \ \ \ \ for\ (String\ s\ \:\ names)\ {\n\ \ \ \ \ \ \ \ \ \ \ \ HashMap<Character,\ Integer>\ freqs\ \=\ new\ HashMap<Character,\ Integer>();\n\ \ \ \ \ \ \ \ \ \ \ \ for\ (int\ i\ \=\ 0;\ i\ <\ s.length();\ i++)\ {\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if\ (\!freqs.containsKey(s.charAt(i)))\ {\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ freqs.put(s.charAt(i),\ 1);\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ else\ freqs.put(s.charAt(i),\ freqs.get(s.charAt(i))\ +\ 1);\n\ \ \ \ \ \ \ \ \ \ \ \ }\n\ \ \ \ \ \ \ \ \ \ \ \ chars.add(freqs);\n\ \ \ \ \ \ \ \ }\n\ \ \ \ \ \ \ \ int\ tot\ \=\ 0;\n\ \ \ \ \ \ \ \ for\ (Character\ c\ \:\ chars.get(0).keySet())\ {\n\ \ \ \ \ \ \ \ \ \ \ \ int\ lowestFreq\ \=\ chars.get(0).get(c);\n\ \ \ \ \ \ \ \ \ \ \ \ for\ (int\ i\ \=\ 1;\ i\ <\ chars.size();\ i++)\ {\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if\ (\!chars.get(i).containsKey(c))\ {\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ lowestFreq\ \=\ 0;\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ break;\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ int\ currFreq\ \=\ chars.get(i).get(c);\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if\ (currFreq\ <\ lowestFreq)\ {\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ lowestFreq\ \=\ currFreq;\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\n\ \ \ \ \ \ \ \ \ \ \ \ }\n\ \ \ \ \ \ \ \ \ \ \ \ tot\ +\=\ lowestFreq;\n\ \ \ \ \ \ \ \ }\n\ \ \ \ \ \ \ \ return\ tot;\n}
+numComments=4

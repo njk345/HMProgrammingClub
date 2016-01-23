@@ -56,7 +56,7 @@ public class Score
 
     //returns how many times any character appears in each string of a given list of strings
     //a character is only counted more than once if it appears that many times in each string
-    public static int commonChars(ArrayList<String> names) {
+    /*public static int commonChars(ArrayList<String> names) {
         ArrayList<HashMap<Character, Integer>> chars = new ArrayList<HashMap<Character, Integer>>();
         for (String s : names) {
             HashMap<Character, Integer> freqs = new HashMap<Character, Integer>();
@@ -84,7 +84,7 @@ public class Score
             tot += lowestFreq;
         }
         return tot;
-    }
+    }*/
 
     //returns whether a given solution contains any name more than once
     public static boolean containsDuplicates(ArrayList<ArrayList<String>> solution) {

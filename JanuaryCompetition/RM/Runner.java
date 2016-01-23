@@ -53,9 +53,10 @@ public class Runner
                 algChoice = a;
                 printCurrBestScore(a);
                 solution = FileUtils.loadSolution(FileUtils.algNames[a-1]+"_Out.txt");
-                int[] op = Opt.bestSwapBruted(solution);
-                System.out.println(Arrays.toString(op));
-                //NO OPT ALGORITHMS TO RUN RIGHT NOW
+                System.out.print("Check All 1-Swaps or All 2-Swaps (Enter 1 or 2): ");
+                int swapType = s.nextInt();
+                Opt.SwapData rv = Opt.bestTwoSwapBruted(solution);
+                System.out.println(rv == null? "Null - No 2-Swap That Improves Solution" : rv.toString());
 
                 break;
                 
