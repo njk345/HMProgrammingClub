@@ -27,7 +27,7 @@ public class Opt
         int currOverall = Score.scoreProblem(solution);
         int bestOverallScore = currOverall;
         for (int room1 = 0; room1 < solution.size(); room1++) {
-            System.out.println("Checking Room " + (room1 + 1) + " Of " + solution.size());
+            //System.out.println("Checking Room " + (room1 + 1) + " Of " + solution.size());
             for (int room2 = 0; room2 < solution.size(); room2++) {
                 if (room1 == room2) continue;
                 int preSwap = Score.scoreRoom(solution.get(room1)) + Score.scoreRoom(solution.get(room2));

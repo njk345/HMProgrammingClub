@@ -48,9 +48,9 @@ public class Score
 
     //returns the score for a single room
     public static int scoreRoom(ArrayList<String> room) {
-        if (room.size() < minRoomSize) {
+        /*if (room.size() < minRoomSize) {
             throw new RuntimeException("Room Has Only " + room.size() + " People");
-        }
+        }*/
         return optCommonChars(room);
     }
 

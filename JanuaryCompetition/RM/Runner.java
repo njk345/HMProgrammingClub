@@ -35,12 +35,13 @@ public class Runner
                 break;
                 
                 case 4:
-                System.out.print("Go for How Many Minutes? ");
+                /*System.out.print("Go for How Many Minutes? ");
                 double maxMin = s.nextDouble();
                 System.out.print("How many Iterations per Iteration? ");
                 int itPerIt = s.nextInt();
                 ArrayList<ArrayList<String>> starter = FileUtils.loadSolution("Simulated Annealing_Out.txt");
-                solution = SimAnneal.solve(starter, maxMin, itPerIt);
+                solution = SimAnneal.solveMethod1(starter, maxMin, itPerIt);*/
+                solution = LastResort.solve(FileUtils.loadSolution("Simulated Annealing_Out.txt"), 6065);
                 break;
                 
                 case 5:
