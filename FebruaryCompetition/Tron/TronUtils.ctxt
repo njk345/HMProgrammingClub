@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.params=board\ person
+comment0.target=int[]\ find(java.util.ArrayList,\ Tron.Tile)
+comment1.params=board
+comment1.target=int[]\ findMe(java.util.ArrayList)
+comment2.params=board
+comment2.target=int[]\ findOpp(java.util.ArrayList)
+comment3.params=board\ pos
+comment3.target=boolean\ isFree(java.util.ArrayList,\ int[])
+comment4.params=pos
+comment4.target=boolean\ offBoard(int[])
+numComments=5

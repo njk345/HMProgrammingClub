@@ -1,0 +1,18 @@
+#BlueJ class context
+comment0.params=data\ parent
+comment0.target=TreeNode(java.lang.Object,\ TreeNode)
+comment1.params=childData
+comment1.target=void\ addChild(java.lang.Object)
+comment2.params=child
+comment2.target=void\ addChild(TreeNode)
+comment3.params=
+comment3.target=java.util.ArrayList\ getChildren()
+comment4.params=
+comment4.target=java.lang.Object\ getData()
+comment5.params=stdPrint
+comment5.target=void\ printData(boolean)
+comment6.params=
+comment6.target=boolean\ isRoot()
+comment7.params=
+comment7.target=boolean\ isLeaf()
+numComments=8

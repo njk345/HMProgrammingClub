@@ -1,0 +1,18 @@
+#BlueJ class context
+comment0.params=board\ startPos
+comment0.target=Bot(java.util.ArrayList,\ int[])
+comment1.params=
+comment1.target=void\ update()
+comment2.params=dir
+comment2.target=void\ move(int)
+comment3.params=dirPriorities
+comment3.target=void\ moveFirstFree(int[])
+comment4.params=
+comment4.target=void\ moveRandomFree()
+comment5.params=
+comment5.target=int\ movesFromOpponent()
+comment6.params=dir
+comment6.target=boolean\ direcFree(int)
+comment7.params=
+comment7.target=void\ logPos()
+numComments=8

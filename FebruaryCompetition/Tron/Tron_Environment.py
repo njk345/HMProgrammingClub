@@ -166,7 +166,8 @@ networker.killAll()
 
 contents = "%d %d %d\n" % (width, height, len(frames))
 for frame in frames: contents += " ".join(str(tile) for row in frame for tile in row) + "\n"
-filename = strftime("%b-%d-%I:%M:%S-%p") + ".trn"
+filename = "Replays/" + strftime("%b-%d-%I:%M:%S-%p") + ".trn"
+print(filename)
 open(filename, "w").write(contents)
 
 print("Output file is stored at " + filename)
