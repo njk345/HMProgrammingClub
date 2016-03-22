@@ -3,7 +3,7 @@ public class Bot {
     //an object to be used to perform certain actions in a game
     //such as keeping track of the current board state, sending moves,
     //and processing optimal next moves
-    
+
     //TOP LEFT = {0,0}
     //BOTTOM LEFT = {0,15}
     //TOP RIGHT = {15,0}
@@ -21,6 +21,12 @@ public class Bot {
 
     public void update() {
         board = Tron.getMap();
+    }
+    public ArrayList<ArrayList<Tron.Tile>> getBoard() {
+        return board;
+    }
+    public int[] getPos() {
+        return pos;
     }
     //sends a move and updates bot's own account of its position
     public void move(int dir) {
@@ -64,51 +70,35 @@ public class Bot {
     }
 
     public void moveRandomFree() {
-        ArrayList<Integer> validDir = new ArrayList<Integer>();
-        validDir.add(1);
-        validDir.add(2);
-        validDir.add(3);
-        validDir.add(4);
-        int randDir = (int)(Math.random() * 4);
-        while (validDir.size() > 0) {
-            Tron.logln("randDir = " + (randDir + 1));
-            if (direcFree(randDir + 1)) {
-                break;
-            }
-            validDir.remove(randDir);
-            randDir = (int)(Math.random() * validDir.size());
+        ArrayList<Integer> freeDirs = freeDirecs();
+        if (freeDirs.size() == 0) move(0);
+        else {
+            int rand = (int)(Math.random() * freeDirs.size());
+            move(freeDirs.get(rand));
         }
-        if (validDir.size() == 0) {
-            Tron.logln("Out of options");
-            move(0);
-        }
-        else move(randDir + 1);
     }
 
     public int movesFromOpponent() {
         int[] op = TronUtils.findOpp(board);
         return Math.abs(op[0] - pos[0]) + Math.abs(op[1] - pos[1]);
+        //Taxicab metric!
+    }
+
+    public ArrayList<Integer> freeDirecs() {
+        ArrayList<Integer> freeDirs = new ArrayList<Integer>();
+        for (int i = 1; i <= 4; i++) {
+            if (direcFree(i)) freeDirs.add(i);
+        }
+        return freeDirs;
     }
 
     public boolean direcFree(int dir) {
-        int[] nextPos = new int[2];
-        if (dir == 1) {
-            nextPos[0] = pos[0];
-            nextPos[1] = pos[1] - 1;
-        } else if (dir == 2) {
-            nextPos[0] = pos[0];
-            nextPos[1] = pos[1] + 1;
-        } else if (dir == 3) {
-            nextPos[0] = pos[0] - 1;
-            nextPos[1] = pos[1];
-        } else if (dir == 4) {
-            nextPos[0] = pos[0] + 1;
-            nextPos[1] = pos[1];
-        } else {
-            return false;
-        }
-        return !TronUtils.offBoard(nextPos) && TronUtils.isFree(board,nextPos);
+        if (dir < 1 || dir > 4) return false;
+        int[] nextPos = TronUtils.movedPos(pos, dir);
+        return !TronUtils.offBoard(nextPos) && TronUtils.isFree(board,nextPos)
+            && !TronUtils.isTrapped(board, nextPos);
     }
+
     public void logPos() {
         Tron.logln("Bot " + botNum + ": Pos = " + pos[0] + ", " + pos[1]);
     }

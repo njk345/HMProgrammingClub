@@ -12,16 +12,46 @@ public class TronUtils {
         //person is off the board, but shouldn't get here
         return new int[]{-1, -1};
     }
+
     public static int[] findMe(ArrayList<ArrayList<Tron.Tile>> board) {
         return find(board, Tron.Tile.ME);
     }
+
     public static int[] findOpp(ArrayList<ArrayList<Tron.Tile>> board) {
         return find(board, Tron.Tile.OPPONENT);
     }
+
     public static boolean isFree(ArrayList<ArrayList<Tron.Tile>> board, int[] pos) {
         return board.get(pos[1]).get(pos[0]) == Tron.Tile.EMPTY;
     }
+    
+    public static boolean isTrapped(ArrayList<ArrayList<Tron.Tile>> board, int[] pos) {
+        for (int i = 1; i <= 4; i++) {
+            int[] adjacentTile = movedPos(pos, i);
+            if (!offBoard(adjacentTile) && isFree(board, adjacentTile)) return true;
+        }
+        return false;
+    }
+
     public static boolean offBoard(int[] pos) {
         return pos[0] >= width || pos[0] < 0 || pos[1] >= height || pos[1] < 0;
+    }
+
+    public static int[] movedPos(int[] pos, int dir) {
+        int[] nextPos = new int[2];
+        if (dir == 1) {
+            nextPos[0] = pos[0];
+            nextPos[1] = pos[1] - 1;
+        } else if (dir == 2) {
+            nextPos[0] = pos[0];
+            nextPos[1] = pos[1] + 1;
+        } else if (dir == 3) {
+            nextPos[0] = pos[0] - 1;
+            nextPos[1] = pos[1];
+        } else if (dir == 4) {
+            nextPos[0] = pos[0] + 1;
+            nextPos[1] = pos[1];
+        }
+        return nextPos;
     }
 }
