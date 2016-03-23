@@ -83,6 +83,25 @@ public class Bot {
         return Math.abs(op[0] - pos[0]) + Math.abs(op[1] - pos[1]);
         //Taxicab metric!
     }
+    
+    public boolean oppMightCollide(int dir) {
+        int[] oppPos = TronUtils.findOpp(board);
+        if (oppPos[0] == pos[0] && Math.abs(oppPos[1] - pos[1]) == 2) {
+            //in same column and two tiles apart
+            if (oppPos[1] - pos[1] < 0) {
+                //opponent above user
+                return dir == 1; //if dir is 1 (up), collision possible
+            } return dir == 2; //if dir is 2 (down), collision possible
+        } else if (oppPos[1] == pos[1] && Math.abs(oppPos[0] - pos[0]) == 2) {
+            //in same row and two tiles apart
+            if (oppPos[0] - pos[0] < 0) {
+                //opponent left of user
+                return dir == 3; //if dir is 3 (left), collision possible
+            } return dir == 4; //if dir is 4 (right), collision possible
+        } else {
+            return false;
+        }
+    }
 
     public ArrayList<Integer> freeDirecs() {
         ArrayList<Integer> freeDirs = new ArrayList<Integer>();
@@ -96,7 +115,7 @@ public class Bot {
         if (dir < 1 || dir > 4) return false;
         int[] nextPos = TronUtils.movedPos(pos, dir);
         return !TronUtils.offBoard(nextPos) && TronUtils.isFree(board,nextPos) &&
-            !TronUtils.moveWouldTrap(board, pos, dir);
+            !TronUtils.moveWouldTrap(board, pos, dir) && !oppMightCollide(dir);
     }
 
     public void logPos() {
