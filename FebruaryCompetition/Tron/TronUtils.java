@@ -25,12 +25,15 @@ public class TronUtils {
         return board.get(pos[1]).get(pos[0]) == Tron.Tile.EMPTY;
     }
     
-    public static boolean isTrapped(ArrayList<ArrayList<Tron.Tile>> board, int[] pos) {
+    public static boolean moveWouldTrap(ArrayList<ArrayList<Tron.Tile>> board, int[] pos, int dir) {
+        int[] potentialMove = movedPos(pos, dir);
         for (int i = 1; i <= 4; i++) {
-            int[] adjacentTile = movedPos(pos, i);
-            if (!offBoard(adjacentTile) && isFree(board, adjacentTile)) return true;
+            int[] adjacentToPotential = movedPos(potentialMove, i);
+            if (!offBoard(adjacentToPotential) && isFree(board, adjacentToPotential)) {
+                return false;
+            }
         }
-        return false;
+        return true;
     }
 
     public static boolean offBoard(int[] pos) {

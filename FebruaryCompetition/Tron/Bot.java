@@ -95,8 +95,8 @@ public class Bot {
     public boolean direcFree(int dir) {
         if (dir < 1 || dir > 4) return false;
         int[] nextPos = TronUtils.movedPos(pos, dir);
-        return !TronUtils.offBoard(nextPos) && TronUtils.isFree(board,nextPos)
-            && !TronUtils.isTrapped(board, nextPos);
+        return !TronUtils.offBoard(nextPos) && TronUtils.isFree(board,nextPos) &&
+            !TronUtils.moveWouldTrap(board, pos, dir);
     }
 
     public void logPos() {
