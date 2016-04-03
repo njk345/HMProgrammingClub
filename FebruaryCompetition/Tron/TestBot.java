@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class GreedyBot
+public class TestBot
 {
     public static void main(String[] args) {
         Tron.init();
