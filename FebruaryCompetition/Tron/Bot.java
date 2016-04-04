@@ -8,9 +8,9 @@ public class Bot {
     //BOTTOM LEFT = {0,15}
     //TOP RIGHT = {15,0}
     //BOTTOM RIGHT = {15,15}
-    private int[] pos;
-    private int botNum;
-    private ArrayList<ArrayList<Tron.Tile>> board;
+    protected int[] pos;
+    protected int botNum;
+    protected ArrayList<ArrayList<Tron.Tile>> board;
     public Bot(ArrayList<ArrayList<Tron.Tile>> board, int[] startPos) {
         this.board = board;
         this.pos = new int[2];

@@ -1,6 +1,4 @@
 #BlueJ class context
 comment0.params=args
 comment0.target=void\ main(java.lang.String[])
-comment1.params=b\ dir
-comment1.target=boolean\ moveWouldCutRegion(Bot,\ int)
-numComments=2
+numComments=1

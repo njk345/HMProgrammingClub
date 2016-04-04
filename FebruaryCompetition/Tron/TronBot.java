@@ -52,20 +52,43 @@ public class TronBot {
     private static class DiagBot extends Bot {
         private static enum MoveState {DIAG, SPACE_FILL};
         private MoveState state;
-        private int dir1, dir2;
-        private int[] dirPriorites;
+        private int dir1, dir2, numMoves;
+        private int[] dirPriorities;
         public DiagBot(ArrayList<ArrayList<Tron.Tile>> board, int[] sp) {
             super(board, sp);
             state = MoveState.DIAG;
             dir1 = sp[0] == 0? 4 : 3;
             dir2 = sp[0] == 0? 2 : 1;
-            dirPriorities = new int[]{1,2,3,4};
-            
+            numMoves = 0;
+            dirPriorities = dir1 == 4? new int[]{1,2,4,3} : new int[]{2,1,3,4};
         }
-        
-        private static boolean moveWouldCutRegion(int dir) {
+        public void smartMove() {
+            switch (state) {
+                case DIAG:
+                    int dir = numMoves % 2 == 0? dir1 : dir2;
+                    if (direcFree(dir)) {
+                        move(dir);
+                    } else {
+                        moveFirstFree(dirPriorities);
+                        state = MoveState.SPACE_FILL;
+                    }
+                    break;
+                case SPACE_FILL:
+                    boolean moveFound = false;
+                    for (int i = 0; i < dirPriorities.length; i++) {
+                        int d = dirPriorities[i];
+                        if (!direcFree(d)) continue;
+                        if (moveWouldCutRegion(d) && i != dirPriorities.length-1) continue;
+                        moveFound = true;
+                        move(d);
+                    }
+                    if (!moveFound) move(0);
+            }
+            numMoves++;
+        }
+        private boolean moveWouldCutRegion(int dir) {
             //move would put bot on edge of board
-            int[] np = TronUtils.movedPos(board, pos, dir);
+            int[] np = TronUtils.movedPos(pos, dir);
             return np[0] == 0 || np[0] == TronUtils.width-1
             || np[1] == 0 || np[1] == TronUtils.height-1;
         }
