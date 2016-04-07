@@ -11,41 +11,12 @@ public class TronBot {
 
         ArrayList<ArrayList<Tron.Tile>> board = Tron.getMap();
         int[] startPos = TronUtils.findMe(board);
-        Bot bot = new Bot(board,startPos);
-
-        //first go diagonally until blocked
-        int diagDir1 = startPos[0] == 0? 4 : 3;
-        int diagDir2 = diagDir1 == 4? 2 : 1;
-
-        int[] priorities = {1,2,3,4};
-        if (diagDir1 == 4) {
-            //if started top left, prioritize going right instead of left
-            priorities[3] = 3;
-            priorities[2] = 4;
-        } else {
-            //if started bottom right, prioritize going down instead of up
-            priorities[0] = 2;
-            priorities[1] = 1;
-        }
-
-        boolean movingDiag = true;
-        int moves = 0;
-
-        Tron.logln("Starting Game:");
+        DiagBot bot = new DiagBot(board,startPos);
+        
         while (true) {
             bot.logPos();
-            if (movingDiag) {
-                int nextMove = moves % 2 == 0? diagDir1 : diagDir2;
-                if (bot.direcFree(nextMove)) {
-                    bot.move(nextMove);
-                } else {//reached end of moving diagonally
-                    bot.moveFirstFree(new int[]{1,2,3,4});
-                    movingDiag = false;
-                }
-                moves++;
-            } else {//can't move diagonally any more
-                bot.moveFirstFree(priorities);
-            }
+            bot.logState();
+            bot.smartMove();
             bot.update();
         }
     }
@@ -54,6 +25,7 @@ public class TronBot {
         private MoveState state;
         private int dir1, dir2, numMoves;
         private int[] dirPriorities;
+        private int[] specialTurnPos;
         public DiagBot(ArrayList<ArrayList<Tron.Tile>> board, int[] sp) {
             super(board, sp);
             state = MoveState.DIAG;
@@ -61,6 +33,7 @@ public class TronBot {
             dir2 = sp[0] == 0? 2 : 1;
             numMoves = 0;
             dirPriorities = dir1 == 4? new int[]{1,2,4,3} : new int[]{2,1,3,4};
+            specialTurnPos = dir1 == 4? new int[]{14,0} : new int[]{1,15};
         }
         public void smartMove() {
             switch (state) {
@@ -74,15 +47,30 @@ public class TronBot {
                     }
                     break;
                 case SPACE_FILL:
+                    if (pos[0] == specialTurnPos[0] && pos[1] == specialTurnPos[1]) {
+                        move(dir1 == 4? 3 : 4);
+                        break;
+                    }
                     boolean moveFound = false;
+                    ArrayList<Integer> lastResorts = new ArrayList<Integer>();
                     for (int i = 0; i < dirPriorities.length; i++) {
                         int d = dirPriorities[i];
                         if (!direcFree(d)) continue;
-                        if (moveWouldCutRegion(d) && i != dirPriorities.length-1) continue;
+                        if (moveWouldCutRegion(d)) {
+                            lastResorts.add(d);
+                            continue;
+                        }
                         moveFound = true;
                         move(d);
+                        break;
                     }
-                    if (!moveFound) move(0);
+                    if (!moveFound) {
+                        if (!lastResorts.isEmpty()) {
+                            move(lastResorts.get(0));
+                        } else {
+                            move(0);
+                        }
+                    }
             }
             numMoves++;
         }
@@ -91,6 +79,9 @@ public class TronBot {
             int[] np = TronUtils.movedPos(pos, dir);
             return np[0] == 0 || np[0] == TronUtils.width-1
             || np[1] == 0 || np[1] == TronUtils.height-1;
+        }
+        public void logState() {
+            Tron.logln("MoveState = " + state);
         }
     }
 }
