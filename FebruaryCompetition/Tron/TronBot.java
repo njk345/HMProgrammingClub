@@ -60,6 +60,10 @@ public class TronBot {
                             lastResorts.add(d);
                             continue;
                         }
+                        else if (oppMightCollide(d)) {
+                            lastResorts.add(d);
+                            continue;
+                        }
                         moveFound = true;
                         move(d);
                         break;
