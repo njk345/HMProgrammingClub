@@ -2,7 +2,7 @@
  * Created by njk on 4/18/16.
  */
 import java.util.*;
-public class TronBot {
+public class GreedyBot {
     public static void main(String[] args) {
         Tron.init();
         ArrayList<ArrayList<Tron.Tile>> board = Tron.getMap();
@@ -11,7 +11,7 @@ public class TronBot {
 
         while (true) {
             //bot.moveRandomFree();
-
+            bot.moveFirstFree(new int[]{1,2,3,4});
             bot.update();
             bot.logPos();
         }
