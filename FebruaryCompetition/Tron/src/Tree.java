@@ -7,6 +7,11 @@ public class Tree<V, E> {
     private Tree<V, E> parent;
     private LinkedHashSet<Tree<V, E>> children;
     private int depth;
+    public Tree(V data) {
+        this.data = data;
+        this.parent = null;
+        this.edgeVal = null;
+    }
     public Tree(V data, Tree<V, E> parent, E edgeVal) {
         this.data = data;
         this.edgeVal = edgeVal;

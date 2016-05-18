@@ -22,7 +22,7 @@ public class TronUtils {
     }
 
     public static boolean isFree(ArrayList<ArrayList<Tron.Tile>> board, int[] pos) {
-        return board.get(pos[1]).get(pos[0]) == Tron.Tile.EMPTY;
+        return !offBoard(pos) && board.get(pos[1]).get(pos[0]) == Tron.Tile.EMPTY;
     }
 
     public static boolean offBoard(int[] pos) {
@@ -45,5 +45,13 @@ public class TronUtils {
             nextPos[1] = pos[1];
         }
         return nextPos;
+    }
+    public static ArrayList<Integer> adjacentFree(ArrayList<ArrayList<Tron.Tile>> board, int[] pos) {
+        ArrayList<Integer> af = new ArrayList<Integer>();
+        for (int i = 1; i <= 4; i++) {
+            int[] nextP = movedPos(pos, i);
+            if (isFree(board, nextP)) af.add(i);
+        }
+        return af;
     }
 }

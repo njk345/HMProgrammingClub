@@ -8,9 +8,14 @@ public class MinimaxBot {
         Board map = new Board(Tron.getMap());
         int[] myPos = map.getMyPos();
         int[] oppPos = map.getOppPos();
-        
+
+        Tree<Board, Integer> testTree = new Tree<Board, Integer>(map);
+        Tron.logln(testTree);
+        while (true) {
+
+        }
     }
-    private static class Board {
+    public static class Board {
         private ArrayList<ArrayList<Tron.Tile>> board;
         private int[] myPos;
         private int[] oppPos;
@@ -20,7 +25,7 @@ public class MinimaxBot {
             // makes a COPY of the inputted 2d list
             this.board = new ArrayList<ArrayList<Tron.Tile>>(board);
             this.myPos = TronUtils.findMe(board);
-            this.oppPos = TronUtils.findMe(board);
+            this.oppPos = TronUtils.findOpp(board);
             meLost = oppLost = false;
         }
         public ArrayList<ArrayList<Tron.Tile>> getBoard()
@@ -62,6 +67,9 @@ public class MinimaxBot {
                     oppLost = true;
                 }
             }
+        }
+        public String toString() {
+            return "My Pos: " + Arrays.toString(myPos) + ", Opp. Pos: " + Arrays.toString(oppPos);
         }
     }
 }
