@@ -6,18 +6,19 @@ public class Tree<V, E> {
     private E edgeVal;
     private Tree<V, E> parent;
     private LinkedHashSet<Tree<V, E>> children;
-    private int depth;
+    //this constructor's to get the tree started (the root)
     public Tree(V data) {
         this.data = data;
         this.parent = null;
         this.edgeVal = null;
+        this.children = new LinkedHashSet<Tree<V, E>>();
     }
+    //this constructor's more for internal use
     public Tree(V data, Tree<V, E> parent, E edgeVal) {
         this.data = data;
         this.edgeVal = edgeVal;
         this.parent = parent;
         this.children = new LinkedHashSet<Tree<V, E>>();
-        this.depth = 0;
     }
     public void addChild(V childData, E edgeVal) {
         Tree<V, E> child = new Tree<V, E>(childData, this, edgeVal);

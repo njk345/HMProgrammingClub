@@ -9,8 +9,13 @@ public class MinimaxBot {
         int[] myPos = map.getMyPos();
         int[] oppPos = map.getOppPos();
 
-        Tree<Board, Integer> testTree = new Tree<Board, Integer>(map);
-        Tron.logln(testTree);
+        //create root of tree with starting map
+        Tree<Board, Integer> moveTree = new Tree<Board, Integer>(map);
+        produceChildren(moveTree);
+        Tron.logln("" + moveTree.getChildren().size());
+        for (Tree<Board, Integer> kid : moveTree.getChildren()) {
+            Tron.logln("Available Direction: " + kid.getEdgeVal().toString());
+        }
         while (true) {
 
         }
@@ -69,7 +74,32 @@ public class MinimaxBot {
             }
         }
         public String toString() {
+            if (meLost && oppLost) return "Both Players Dead";
+            if (meLost) return "User Dead";
+            if (oppLost) return "Opponent Dead";
             return "My Pos: " + Arrays.toString(myPos) + ", Opp. Pos: " + Arrays.toString(oppPos);
+        }
+    }
+    //dummy method for now
+    private static double evalBoard(Board map) {
+        switch(map.checkForWinner()) {
+            case 0:
+                return 100;
+            case 1:
+                return -100;
+            case 2:
+                //return difference in number of my free adjacent tiles and those of opponent, times 25
+                int freeDiff = TronUtils.adjacentFree(map.getBoard(), map.getMyPos()).size()
+                        - TronUtils.adjacentFree(map.getBoard(), map.getOppPos()).size();
+                return freeDiff * 25;
+        }
+        return Integer.MIN_VALUE; //NOT POSSIBLE
+    }
+    private static void produceChildren(Tree<Board, Integer> moveTree) {
+        Board currMap = moveTree.getData();
+        ArrayList<Integer> possibleMoves = TronUtils.freeDirecs(currMap.getBoard(), currMap.getMyPos());
+        for (int d : possibleMoves) {
+            moveTree.addChild(new Board(new ArrayList<ArrayList<Tron.Tile>>(currMap.getBoard())), d);
         }
     }
 }

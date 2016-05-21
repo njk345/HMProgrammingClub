@@ -55,7 +55,7 @@ public class Bot {
     public void moveFirstFree(int[] dirPriorities) {
         boolean moveFound = false;
         for (int dir : dirPriorities) {
-            if (direcFree(dir)) {
+            if (TronUtils.direcFree(board, pos, dir)) {
                 move(dir);
                 moveFound = true;
                 break;
@@ -65,7 +65,7 @@ public class Bot {
     }
 
     public void moveRandomFree() {
-        ArrayList<Integer> freeDirs = freeDirecs();
+        ArrayList<Integer> freeDirs = TronUtils.freeDirecs(board, pos);
         if (freeDirs.isEmpty()) move(0);
         else {
             int rand = (int)(Math.random() * freeDirs.size());
@@ -89,18 +89,6 @@ public class Bot {
         int[] np = TronUtils.movedPos(pos,dir);
         return movesFromOpponent(np, op) == 1;
     }*/
-    
-    public boolean moveWouldTrap(int dir) {
-        return TronUtils.adjacentFree(board, TronUtils.movedPos(pos, dir)).isEmpty();
-    }
-
-    public ArrayList<Integer> freeDirecs() {
-        return TronUtils.adjacentFree(board, pos);
-    }
-
-    public boolean direcFree(int dir) {
-        return freeDirecs().contains(dir);
-    }
 
     public void logPos() {
         Tron.logln("Pos = " + pos[0] + ", " + pos[1]);

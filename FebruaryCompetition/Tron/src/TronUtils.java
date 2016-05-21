@@ -29,6 +29,23 @@ public class TronUtils {
         return pos[0] >= width || pos[0] < 0 || pos[1] >= height || pos[1] < 0;
     }
 
+    public static boolean moveWouldTrap(ArrayList<ArrayList<Tron.Tile>> board, int[] pos, int dir) {
+        return TronUtils.adjacentFree(board, TronUtils.movedPos(pos, dir)).isEmpty();
+    }
+
+    public static ArrayList<Integer> freeDirecs(ArrayList<ArrayList<Tron.Tile>> board, int[] pos) {
+        ArrayList<Integer> freeAdj = TronUtils.adjacentFree(board, pos);
+        ArrayList<Integer> freeDirs = new ArrayList<Integer>();
+        for (int d : freeAdj) {
+            if (direcFree(board, pos, d)) freeDirs.add(d);
+        }
+        return freeDirs;
+    }
+
+    public static boolean direcFree(ArrayList<ArrayList<Tron.Tile>> board, int[] pos, int dir) {
+        return TronUtils.adjacentFree(board, pos).contains(dir) && !TronUtils.moveWouldTrap(board, pos, dir);
+    }
+
     public static int[] movedPos(int[] pos, int dir) {
         int[] nextPos = new int[2];
         if (dir == 1) {
