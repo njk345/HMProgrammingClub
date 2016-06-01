@@ -1,4 +1,7 @@
 import java.util.*;
+
+//miscellaneous useful functions
+
 public class TronUtils {
     public static final int width = 16, height = 16;
     private static int[] find(ArrayList<ArrayList<Tron.Tile>> board, Tron.Tile person) {

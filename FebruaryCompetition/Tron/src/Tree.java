@@ -1,4 +1,7 @@
 import java.util.*;
+
+//this was to be used in a sophisticated minimax, but I ran out of time...
+
 public class Tree<V, E> {
     private V data;
     //here the edgeVal is the edge leading from the node's parent to the node itself,
@@ -39,11 +42,25 @@ public class Tree<V, E> {
     public boolean isRoot() {
         return this.parent == null;
     }
-    public boolean isLeaf() {
+    public boolean isLeaf()
+    {
         return this.children.isEmpty();
+    }
+    public int getDepth() {
+        if (this.isRoot()) return 0;
+        return 1 + this.getParent().getDepth();
     }
     public String toString() {
         //assuming type of data has a nicely defined toString() method
         return this.data.toString();
+    }
+    public void printDiagram(int indent) {
+        for (int i = 0; i < indent; i++) {
+            Tron.log("\t");
+        }
+        Tron.logln(this.toString());
+        for (Tree<V, E> kid : children) {
+            kid.printDiagram(indent+1);
+        }
     }
 }

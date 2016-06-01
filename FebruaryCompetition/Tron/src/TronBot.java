@@ -4,28 +4,28 @@
  */
 import java.util.*;
 
-public class TronBot {
-    private static final int TOLERANCE = 3;
+public class MyTronBot {
+    //private static final int TOLERANCE = 3;
     public static void main(String[] args) {
         Tron.init();
         ArrayList<ArrayList<Tron.Tile>> board = Tron.getMap();
         int[] myPos = TronUtils.findMe(board);
         Bot bot = new Bot(board, myPos);
 
-        int[] dirs = {1,2,3,4};
+        //int[] dirs = {1,2,3,4};
 
         while (true) {
             //bot.moveRandomFree();
-            //bot.moveFirstFree(new int[]{1,2,3,4});
-            boolean moveFound = false;
+            bot.moveFirstFree(new int[]{1,2,3,4});
+            /*boolean moveFound = false;
             for (int d = 0; d < dirs.length; d++) {
-                if (TronUtils.direcFree(board, bot.getPos(), dirs[d]) /*&& !moveWouldLinearTrap(board, bot.getPos(), dirs[d], TOLERANCE)*/) {
+                if (TronUtils.direcFree(board, bot.getPos(), dirs[d]) /*&& !moveWouldLinearTrap(board, bot.getPos(), dirs[d], TOLERANCE)*//*) {
                     moveFound = true;
                     bot.move(dirs[d]);
                     break;
                 }
             }
-            if (!moveFound) bot.move(0);
+            if (!moveFound) bot.move(0);*/
             bot.update();
             bot.logPos();
         }
