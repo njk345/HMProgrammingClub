@@ -4,16 +4,21 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 public class Runner {
-    public static String[] algorithms = {"In Input Order"};
+    public static String[] algorithms = {"In Input Order", "Greedy"};
     public static void main(String[] args) {
-        ArrayList<Point> points = Utils.getInput();
         Scanner scanner = new Scanner(System.in);
+        ArrayList<Point> points = Utils.getInput();
 
         System.out.println("Choose An Algorithm:");
         printChoices();
         int choice = scanner.nextInt();
 
         Algorithm algo = getAlgorithm(choice);
+        while (algo == null) {
+            System.out.print("Invalid Choice, Pick Again: ");
+            int c = scanner.nextInt();
+            algo = getAlgorithm(c);
+        }
 
         System.out.println("Solving...");
         ArrayList<Line> tree = algo.makeTree(points);
@@ -30,6 +35,8 @@ public class Runner {
         switch (choice) {
             case 1:
                 return new SpitBack();
+            case 2:
+                return new Greedy();
             default:
                 return null;
         }
