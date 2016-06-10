@@ -4,7 +4,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 public class Runner {
-    public static String[] algorithms = {"In Input Order", "Greedy", "Simulated Annealing"};
+    public static String[] algorithms = {"In Input Order", "Greedy", "Simulated Annealing", "Prim"};
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         ArrayList<Point> points = Utils.getInput();
@@ -41,6 +41,8 @@ public class Runner {
                 System.out.print("Run For How Many Minutes? ");
                 double m = scanner.nextDouble();
                 return new SimAnneal(m);
+            case 4:
+                return new Prim();
             default:
                 return null;
         }
