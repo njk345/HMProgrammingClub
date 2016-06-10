@@ -1,8 +1,5 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.ArrayList;
+import java.util.*;
+import java.io.*;
 
 public class Utils {
     public static final String inputFileName = "input.txt";
@@ -39,6 +36,42 @@ public class Utils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public static ArrayList<Line> loadSolution(String fileName) {
+        ArrayList<Line> tree = new ArrayList<>();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                String[] splitUp = line.split(" ");
+                Point p1 = new Point(Double.parseDouble(splitUp[0]), Double.parseDouble(splitUp[1]));
+                Point p2 = new Point(Double.parseDouble(splitUp[2]), Double.parseDouble(splitUp[3]));
+                tree.add(new Line(p1, p2));
+            }
+            br.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return tree;
+    }
+    private static class SolutionFileFilter implements FilenameFilter {
+        public boolean accept(File dir, String fileName) {
+            return fileName.substring(fileName.length() - 3).equals("txt");
+        }
+    }
+    public static String bestSolutionFileName() {
+        File directory = new File(outputFileHeader);
+        int bestScore = Integer.MAX_VALUE;
+        String bestFileName = null;
+        for (File f : directory.listFiles(new SolutionFileFilter())) {
+            String name = f.getName().substring(0, f.getName().length() - 4);
+            int score = Integer.parseInt(name);
+            if (score < bestScore) {
+                bestScore = score;
+                bestFileName = f.getName();
+            }
+        }
+        return bestFileName;
     }
     public static double scoreTree(ArrayList<Line> tree) {
         double s = 0;

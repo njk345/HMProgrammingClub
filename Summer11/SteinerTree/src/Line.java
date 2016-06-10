@@ -15,6 +15,12 @@ public class Line {
     public Point getP2() {
         return p2;
     }
+    public void setP1(Point p) {
+        p1 = p;
+    }
+    public void setP2(Point p) {
+        p2 = p;
+    }
     public double getLength() {
         return length;
     }

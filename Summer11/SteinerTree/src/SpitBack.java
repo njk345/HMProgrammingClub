@@ -8,7 +8,6 @@ public class SpitBack implements Algorithm {
         for (int i = 0; i < points.size() - 1; i++) {
             tree.add(new Line(points.get(i), points.get(i+1)));
         }
-        tree.add(new Line(points.get(points.size() - 1), points.get(0)));
         return tree;
     }
 }
