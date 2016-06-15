@@ -25,6 +25,15 @@ public class Utils {
         try {
             double score = scoreTree(outputs);
             String outputFileName = outputFileHeader + (int)score + ".txt";
+            if (new File(outputFileName).exists()) {
+                //if the file already exists, compare the two scores and
+                //don't overwrite if the new solution isn't better
+                if (score > scoreTree(loadSolution(outputFileName))) {
+                    System.out.println("Solution NOT Written to File");
+                    return;
+                }
+                //otherwise, we continue with overwriting process
+            }
             BufferedWriter bw = new BufferedWriter(new FileWriter(outputFileName));
             for (int i = 0; i < outputs.size(); i++) {
                 bw.write(outputs.get(i).toString());
@@ -36,6 +45,7 @@ public class Utils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("Solution Written To File");
     }
     public static ArrayList<Line> loadSolution(String fileName) {
         ArrayList<Line> tree = new ArrayList<>();

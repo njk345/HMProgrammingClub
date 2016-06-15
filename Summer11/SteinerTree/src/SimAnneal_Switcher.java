@@ -2,14 +2,14 @@
  * Created by njk on 6/8/16.
  */
 import java.util.*;
-public class SimAnneal implements Algorithm {
+public class SimAnneal_Switcher implements Algorithm {
     private static final String startingSolutionFileName = "trees/" + Utils.bestSolutionFileName();
     private static final double STARTING_TEMP = 20;
     private static final double MIN_TEMP = 0.01;
     private static final double TEMP_FACTOR = 0.999;
     private double maxMinutes;
     private long maxMillis;
-    public SimAnneal(double maxMin) {
+    public SimAnneal_Switcher(double maxMin) {
         maxMinutes = maxMin;
         maxMillis = (long)(60000 * maxMinutes);
     }

@@ -14,7 +14,7 @@ public class Prim implements Algorithm {
         visited[0] = true;
         indiciesVisited.add(0);
 
-        while (tree.size() < points.size() - 1) {
+        while (indiciesVisited.size() < points.size()) {
             //find next shortest, available edge
             double minEdgeLen = Double.MAX_VALUE;
             int[] minEdgePair = {-1, -1};
@@ -27,6 +27,11 @@ public class Prim implements Algorithm {
                         minEdgePair[1] = j;
                     }
                 }
+            }
+            if (minEdgePair[0] == -1 && minEdgePair[1] == -1) {
+                System.out.println("error");
+                System.out.println(indiciesVisited.size());
+                System.out.println(tree.size() + " || " + (points.size()));
             }
             tree.add(new Line(points.get(minEdgePair[0]), points.get(minEdgePair[1])));
             visited[minEdgePair[1]] = true;
