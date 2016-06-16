@@ -3,11 +3,9 @@
  */
 public class Line {
     private Point p1, p2;
-    private double length;
     public Line(Point p1, Point p2) {
         this.p1 = p1;
         this.p2 = p2;
-        this.length = Utils.dist(p1, p2);
     }
     public Point getP1() {
         return p1;
@@ -22,7 +20,7 @@ public class Line {
         p2 = p;
     }
     public double getLength() {
-        return length;
+        return Utils.dist(p1, p2);
     }
     public String toString() {
         return p1.toString() + " " + p2.toString();

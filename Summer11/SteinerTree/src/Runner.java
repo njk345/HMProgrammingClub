@@ -25,7 +25,7 @@ public class Runner {
         ArrayList<Line> tree = algo.makeTree(points);
         System.out.println("Finished - Score = " + Utils.scoreTree(tree));
 
-        Utils.writeOutput(tree);
+        //Utils.writeOutput(tree);
     }
     private static void printChoices() {
         for (int i = 0; i < algorithms.length; i++) {
