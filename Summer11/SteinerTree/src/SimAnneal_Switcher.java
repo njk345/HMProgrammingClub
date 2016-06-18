@@ -7,11 +7,9 @@ public class SimAnneal_Switcher implements Algorithm {
     private static final double STARTING_TEMP = 20;
     private static final double MIN_TEMP = 0.01;
     private static final double TEMP_FACTOR = 0.999;
-    private double maxMinutes;
-    private long maxMillis;
+    private final long maxMillis;
     public SimAnneal_Switcher(double maxMin) {
-        maxMinutes = maxMin;
-        maxMillis = (long)(60000 * maxMinutes);
+        maxMillis = (long)(60000 * maxMin);
     }
 
     public ArrayList<Line> makeTree(ArrayList<Point> points) {
@@ -38,9 +36,9 @@ public class SimAnneal_Switcher implements Algorithm {
     }
     private static ArrayList<Line> neighborTree(ArrayList<Line> tree) {
         ArrayList<Point> points = new ArrayList<>();
-        for (int i = 0; i < tree.size(); i++) {
+        for (Line aTree : tree) {
             //make COPIES of the points
-            points.add(tree.get(i).getP1());
+            points.add(aTree.getP1());
         }
         points.add(tree.get(tree.size() - 1).getP2());
         //now swap two random points

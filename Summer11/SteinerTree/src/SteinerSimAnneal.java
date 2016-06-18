@@ -8,17 +8,13 @@ public class SteinerSimAnneal implements Algorithm {
     private static final double MIN_TEMP = 0.01;
     private static final double TEMP_FACTOR = 0.999;
     private static final long RAND_SEED = System.currentTimeMillis();
-    private double maxMinutes;
-    private long maxMillis;
+    private final long maxMillis;
     private static final Prim mstAlgo = new Prim();
     private static final Random randGen = new Random(RAND_SEED);
     public SteinerSimAnneal(double maxMin) {
-        maxMinutes = maxMin;
-        maxMillis = (long)(60000 * maxMinutes);
+        maxMillis = (long)(60000 * maxMin);
     }
     public ArrayList<Line> makeTree(ArrayList<Point> points) {
-        //ArrayList<Line> currTree = Utils.loadSolution(startingSolutionFileName);
-
         double currScore = Utils.scoreTree(mstAlgo.makeTree(points));
         double temp = STARTING_TEMP;
         long startTime = System.currentTimeMillis();
@@ -27,21 +23,17 @@ public class SteinerSimAnneal implements Algorithm {
         ArrayList<Point> allTimeBestGraph = new ArrayList<>(points);
 
         System.out.println("Starting Score = " + currScore);
-        ArrayList<int[]> steinerTrios = new ArrayList<>();
 
         while ((System.currentTimeMillis() - startTime) < maxMillis) {
-            ArrayList<int[]> stCopies = new ArrayList<>(steinerTrios);
-            ArrayList<Point> ng = neighborGraph(points, stCopies);
+            ArrayList<Point> ng = neighborGraph(points);
             double ngScore = Utils.scoreTree(mstAlgo.makeTree(ng));
             if (Math.random() < prob(currScore, ngScore, temp)) {
                 points = ng;
                 currScore = ngScore;
-                steinerTrios = stCopies;
                 System.out.println("Change Accepted - Score = " + currScore);
-            } else {
+            } /*else {
                 System.out.println("Change Rejected - Proposed Score was " + ngScore);
-            }
-            //System.out.println(" || #points = " + points.size() + ", #trios = " + steinerTrios.size());
+            }*/
             if (temp > MIN_TEMP) {
                 temp *= TEMP_FACTOR;
             }
@@ -53,34 +45,34 @@ public class SteinerSimAnneal implements Algorithm {
 
         return mstAlgo.makeTree(allTimeBestGraph);
     }
-    private static ArrayList<Point> neighborGraph(ArrayList<Point> points, ArrayList<int[]> steinerTrios) {
+    private static ArrayList<Point> neighborGraph(ArrayList<Point> points) {
         ArrayList<Point> copyPoints = new ArrayList<>(points);
         if (copyPoints.size() == 1998) {
             //1/2 chance we delete, 1/2 chance we replace
             if (randGen.nextDouble() < 0.5) {
-                deletePoint(copyPoints, steinerTrios);
+                deletePoint(copyPoints);
             } else {
-                replacePoint(copyPoints, steinerTrios);
+                replacePoint(copyPoints);
             }
         } else if (copyPoints.size() == 1000) {
             //can only add
-            addPoint(copyPoints, steinerTrios);
+            addPoint(copyPoints);
         } else {
             //1/3 chance we add, 1/3 chance we delete, 1/3 chance we replace
             double rand = randGen.nextDouble();
             if (rand < (double) 1 / 3) {
-                addPoint(copyPoints, steinerTrios);
+                addPoint(copyPoints);
             } else if (rand >= (double) 2 / 3) {
-                deletePoint(copyPoints, steinerTrios);
+                deletePoint(copyPoints);
             } else {
-                replacePoint(copyPoints, steinerTrios);
+                replacePoint(copyPoints);
             }
         }
         return copyPoints;
     }
     //pick three random points and add the steiner point
     //then reform the MST
-    private static void addPoint(ArrayList<Point> points, ArrayList<int[]> steinerTrios) {
+    private static void addPoint(ArrayList<Point> points) {
         //System.out.print("Adding Point --> ");
         //pick 3 distinct random indices out of points list
         int rand1 = randGen.nextInt(points.size());
@@ -93,20 +85,55 @@ public class SteinerSimAnneal implements Algorithm {
             rand3 = randGen.nextInt(points.size());
         }
         points.add(getSteinerPoint(points.get(rand1), points.get(rand2), points.get(rand3)));
-        //steinerTrios.add(new int[]{rand1, rand2, rand3});
     }
     //pick one random steiner point and remove it
     //then reform the MST
-    private static void deletePoint(ArrayList<Point> points, ArrayList<int[]> steinerTrios) {
+    private static void deletePoint(ArrayList<Point> points) {
         //System.out.print("Deleting Point --> ");
         int randSteinerPoint = randGen.nextInt(points.size() - 1000) + 1000;
         points.remove(randSteinerPoint);
-        //steinerTrios.remove(randSteinerPoint - 1000);
     }
     //perform add, then perform delete
-    private static void replacePoint(ArrayList<Point> points, ArrayList<int[]> steinerTrios) {
-        deletePoint(points, steinerTrios);
-        addPoint(points, steinerTrios);
+    private static void replacePoint(ArrayList<Point> points) {
+        deletePoint(points);
+        addPoint(points);
+    }
+    private static Point getFermatPoint(Point p1, Point p2, Point p3) {
+        double[] angles = getAngles(p1, p2, p3);
+        double deg120 = 2.0 * Math.PI / 3.0;
+        double deg30 = Math.PI / 6.0;
+        if (angles[0] >= deg120) return p1;
+        if (angles[1] >= deg120) return p2;
+        if (angles[2] >= deg120) return p3;
+
+        double x = 1.0 / Math.cos(angles[0] - deg30);
+        double y = 1.0 / Math.cos(angles[1] - deg30);
+        double z = 1.0 / Math.cos(angles[2] - deg30);
+
+        double a = Utils.dist(p2, p3);
+        double b = Utils.dist(p1, p3);
+        double c = Utils.dist(p1, p2);
+
+        double d = a*x + b*y + c*z;
+
+        double fx = (a*x/d) * p1.getX() + (b*y/d) * p2.getX() + (c*z/d) * p3.getX();
+        double fy = (a*x/d) * p1.getY() + (b*y/d) * p2.getY() + (c*z/d) * p3.getY();
+
+        return new Point(fx, fy);
+    }
+    private static double[] getAngles(Point a, Point b, Point c) {
+        //returns the three interior angles of triangle formed by three points
+        //angle measures are in RADIANS
+        double adot = (b.getX()-a.getX())*(c.getX()-a.getX()) + (b.getY()-a.getY())*(c.getY()-a.getY());
+        double bdot = (c.getX()-b.getX())*(a.getX()-b.getX()) + (c.getY()-b.getY())*(a.getY()-b.getY());
+        double cdot = (a.getX()-c.getX())*(b.getX()-c.getX()) + (a.getY()-c.getY())*(b.getY()-c.getY());
+        double dist1 = Utils.dist(a,b);
+        double dist2 = Utils.dist(a,c);
+        double dist3 = Utils.dist(b,c);
+        double angleA = Math.acos(adot / (dist1 * dist2));
+        double angleB = Math.acos(bdot / (dist1 * dist3));
+        double angleC = Math.acos(cdot / (dist2 * dist3));
+        return new double[]{angleA, angleB, angleC};
     }
     private static Point getSteinerPoint(Point p1, Point p2, Point p3) {
         //side lengths

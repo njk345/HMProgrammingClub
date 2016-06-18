@@ -8,7 +8,7 @@ public class Utils {
         ArrayList<Point> points = new ArrayList<>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(inputFileName));
-            String line = null;
+            String line;
             while ((line = br.readLine()) != null){
                 String[] parts = line.split(" ");
                 double x = Double.parseDouble(parts[0]);
@@ -51,7 +51,7 @@ public class Utils {
         ArrayList<Line> tree = new ArrayList<>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(fileName));
-            String line = null;
+            String line;
             while ((line = br.readLine()) != null) {
                 String[] splitUp = line.split(" ");
                 Point p1 = new Point(Double.parseDouble(splitUp[0]), Double.parseDouble(splitUp[1]));
@@ -91,7 +91,9 @@ public class Utils {
         return s;
     }
     public static double dist(Point p1, Point p2) {
-        return Math.sqrt(Math.pow((p1.getX() - p2.getX()), 2) + Math.pow((p1.getY() - p2.getY()), 2));
+        double a = p1.getX() - p2.getX();
+        double b = p1.getY() - p2.getY();
+        return Math.sqrt(a*a + b*b);
     }
     public static double[][] distsMatrix(ArrayList<Point> points) {
         double[][] dists = new double[points.size()][points.size()];
