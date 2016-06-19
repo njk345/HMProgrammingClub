@@ -28,7 +28,7 @@ public class Utils {
             if (new File(outputFileName).exists()) {
                 //if the file already exists, compare the two scores and
                 //don't overwrite if the new solution isn't better
-                if (score > scoreTree(loadSolution(outputFileName))) {
+                if (score > scoreTree(loadSolutionTree(outputFileName))) {
                     System.out.println("Solution NOT Written to File");
                     return;
                 }
@@ -47,7 +47,7 @@ public class Utils {
         }
         System.out.println("Solution Written To File");
     }
-    public static ArrayList<Line> loadSolution(String fileName) {
+    public static ArrayList<Line> loadSolutionTree(String fileName) {
         ArrayList<Line> tree = new ArrayList<>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(fileName));
@@ -63,6 +63,31 @@ public class Utils {
             e.printStackTrace();
         }
         return tree;
+    }
+    public static ArrayList<Point> loadSolutionPoints(String fileName) {
+        ArrayList<Point> inputSet = Utils.getInput();
+        ArrayList<Point> uniqueSolutionSet = new ArrayList<>();
+        ArrayList<Line> solutionTree = loadSolutionTree(fileName);
+        for (Line l : solutionTree) {
+            if (!uniqueSolutionSet.contains(l.getP1())) {
+                uniqueSolutionSet.add(l.getP1());
+            }
+            if (!uniqueSolutionSet.contains(l.getP2())) {
+                uniqueSolutionSet.add(l.getP2());
+            }
+        }
+        ArrayList<Point> addedPoints = new ArrayList<>();
+        for (int i = 0; i < uniqueSolutionSet.size(); i++) {
+            if (!inputSet.contains(uniqueSolutionSet.get(i))) {
+                addedPoints.add(uniqueSolutionSet.get(i));
+                uniqueSolutionSet.remove(i);
+                i--;
+            }
+        }
+        for (Point p : addedPoints) {
+            uniqueSolutionSet.add(p);
+        }
+        return uniqueSolutionSet;
     }
     private static class SolutionFileFilter implements FilenameFilter {
         public boolean accept(File dir, String fileName) {

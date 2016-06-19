@@ -3,18 +3,24 @@
  */
 import java.util.*;
 public class SteinerSimAnneal implements Algorithm {
-    //private static final String startingSolutionFileName = "trees/" + Utils.bestSolutionFileName();
-    private static final double STARTING_TEMP = 10;
-    private static final double MIN_TEMP = 0.01;
+    private static final String startingSolutionFileName = "trees/" + Utils.bestSolutionFileName();
+    private double STARTING_TEMP = 10;
+    private static final double MIN_TEMP = 0.001;
     private static final double TEMP_FACTOR = 0.999;
     private static final long RAND_SEED = System.currentTimeMillis();
     private final long maxMillis;
     private static final Prim mstAlgo = new Prim();
     private static final Random randGen = new Random(RAND_SEED);
-    public SteinerSimAnneal(double maxMin) {
+    private final boolean startBest;
+    public SteinerSimAnneal(double maxMin, boolean startBest) {
         maxMillis = (long)(60000 * maxMin);
+        this.startBest = startBest;
+        if (startBest) STARTING_TEMP = MIN_TEMP;
     }
     public ArrayList<Line> makeTree(ArrayList<Point> points) {
+        if (startBest) {
+            points = Utils.loadSolutionPoints(startingSolutionFileName);
+        } //otherwise, we simply use the parameter points list
         double currScore = Utils.scoreTree(mstAlgo.makeTree(points));
         double temp = STARTING_TEMP;
         long startTime = System.currentTimeMillis();
@@ -60,9 +66,9 @@ public class SteinerSimAnneal implements Algorithm {
         } else {
             //1/3 chance we add, 1/3 chance we delete, 1/3 chance we replace
             double rand = randGen.nextDouble();
-            if (rand < (double) 1 / 3) {
+            if (rand < 1.0 / 3.0) {
                 addPoint(copyPoints);
-            } else if (rand >= (double) 2 / 3) {
+            } else if (rand >= 2.0 / 3.0) {
                 deletePoint(copyPoints);
             } else {
                 replacePoint(copyPoints);
@@ -102,9 +108,9 @@ public class SteinerSimAnneal implements Algorithm {
         double[] angles = getAngles(p1, p2, p3);
         double deg120 = 2.0 * Math.PI / 3.0;
         double deg30 = Math.PI / 6.0;
-        if (angles[0] >= deg120) return p1;
-        if (angles[1] >= deg120) return p2;
-        if (angles[2] >= deg120) return p3;
+        if (angles[0] >= deg120) return new Point(p1.getX() + 0.001, p1.getY()+0.001);
+        if (angles[1] >= deg120) return new Point(p2.getX() + 0.001, p2.getY()+0.001);
+        if (angles[2] >= deg120) return new Point(p3.getX() + 0.001, p3.getY()+0.001);
 
         double x = 1.0 / Math.cos(angles[0] - deg30);
         double y = 1.0 / Math.cos(angles[1] - deg30);

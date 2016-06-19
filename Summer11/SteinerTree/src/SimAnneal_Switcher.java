@@ -13,7 +13,7 @@ public class SimAnneal_Switcher implements Algorithm {
     }
 
     public ArrayList<Line> makeTree(ArrayList<Point> points) {
-        ArrayList<Line> currTree = Utils.loadSolution(startingSolutionFileName);
+        ArrayList<Line> currTree = Utils.loadSolutionTree(startingSolutionFileName);
         double currScore = Utils.scoreTree(currTree);
         double temp = STARTING_TEMP;
         long startTime = System.currentTimeMillis();
