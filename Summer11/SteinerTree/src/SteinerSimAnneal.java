@@ -5,16 +5,18 @@ import java.util.*;
 public class SteinerSimAnneal implements Algorithm {
     private static final String startingSolutionFileName = "trees/" + Utils.bestSolutionFileName();
     private double STARTING_TEMP = 10;
-    private static final double MIN_TEMP = 0.001;
+    private static final double MIN_TEMP = 0.0001;
     private static final double TEMP_FACTOR = 0.999;
     private static final long RAND_SEED = System.currentTimeMillis();
     private final long maxMillis;
     private static final Prim mstAlgo = new Prim();
     private static final Random randGen = new Random(RAND_SEED);
     private final boolean startBest;
-    public SteinerSimAnneal(double maxMin, boolean startBest) {
+    private final boolean hillClimb;
+    public SteinerSimAnneal(double maxMin, boolean startBest, boolean hillClimb) {
         maxMillis = (long)(60000 * maxMin);
         this.startBest = startBest;
+        this.hillClimb = hillClimb;
         if (startBest) STARTING_TEMP = MIN_TEMP;
     }
     public ArrayList<Line> makeTree(ArrayList<Point> points) {
@@ -32,7 +34,11 @@ public class SteinerSimAnneal implements Algorithm {
 
         while ((System.currentTimeMillis() - startTime) < maxMillis) {
             ArrayList<Point> ng = neighborGraph(points);
-            double ngScore = Utils.scoreTree(mstAlgo.makeTree(ng));
+            ArrayList<Line> ngTree = mstAlgo.makeTree(ng);
+
+            if (ngTree == null) continue;
+
+            double ngScore = Utils.scoreTree(ngTree);
             if (Math.random() < prob(currScore, ngScore, temp)) {
                 points = ng;
                 currScore = ngScore;
@@ -90,7 +96,7 @@ public class SteinerSimAnneal implements Algorithm {
         while (rand3 == rand2 || rand3 == rand1) {
             rand3 = randGen.nextInt(points.size());
         }
-        points.add(getSteinerPoint(points.get(rand1), points.get(rand2), points.get(rand3)));
+        points.add(getFermatPoint(points.get(rand1), points.get(rand2), points.get(rand3)));
     }
     //pick one random steiner point and remove it
     //then reform the MST
@@ -158,13 +164,11 @@ public class SteinerSimAnneal implements Algorithm {
         double y = p1.getY() * (a*tx / denom) + p2.getY() * (b*ty / denom) + p3.getY() * (c*tz / denom);
         return new Point(x, y);
     }
-    private static double prob(double oldScore, double newScore, double temp) {
-        return newScore < oldScore? 1 : Math.exp(-(newScore - oldScore) / temp);
-    }
-    private static boolean trioUsed(ArrayList<int[]> steinerTrios, int[] trio) {
-        for (int[] t : steinerTrios) {
-            if (trio[0] == t[0] && trio[1] == t[1] && trio[2] == t[2]) return true;
+    private double prob(double oldScore, double newScore, double temp) {
+        if (hillClimb) {
+            return newScore < oldScore? 1 : 0;
+        } else {
+            return newScore < oldScore ? 1 : Math.exp(-(newScore - oldScore) / temp);
         }
-        return false;
     }
 }

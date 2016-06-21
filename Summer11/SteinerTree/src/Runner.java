@@ -26,7 +26,7 @@ public class Runner {
         ArrayList<Line> tree = algo.makeTree(points);
         System.out.println("Finished - Score = " + Utils.scoreTree(tree));
 
-        //Utils.writeOutput(tree);
+        Utils.writeOutput(tree);
     }
     private static void printChoices() {
         for (int i = 0; i < algorithms.length; i++) {
@@ -50,12 +50,10 @@ public class Runner {
                 double m2 = scanner.nextDouble();
                 scanner.nextLine();
                 System.out.print("Start From Best Solution? (y/n): ");
-                String resp = scanner.nextLine();
-                if (resp.toLowerCase().equals("y")) {
-                    return new SteinerSimAnneal(m2, true);
-                } else {
-                    return new SteinerSimAnneal(m2, false);
-                }
+                String resp = scanner.nextLine().toLowerCase();
+                System.out.print("Hill Climb? (y/n): ");
+                String resp2 = scanner.nextLine().toLowerCase();
+                return new SteinerSimAnneal(m2, resp.equals("y"), resp2.equals("y"));
             default:
                 return null;
         }

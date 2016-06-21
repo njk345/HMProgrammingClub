@@ -23,8 +23,15 @@ public class Prim implements Algorithm {
                     minConnection = i;
                 }
             }
-
-            indicesVisited[minConnection] = true;
+            try {
+                indicesVisited[minConnection] = true;
+            } catch(ArrayIndexOutOfBoundsException e) {
+                //something's fishy about the last point that was added,
+                //so get rid of it and throw away the algorithm iteration
+                System.out.println("ERROR");
+                points.remove(points.size() - 1);
+                return null;
+            }
             if (cheapestConnections[minConnection] != -1) {
                 tree.add(new Line(points.get(minConnection), points.get(cheapestConnections[minConnection])));
             }
