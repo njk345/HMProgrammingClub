@@ -23,12 +23,16 @@ public class SteinerSimAnneal implements Algorithm {
         if (startBest) {
             points = Utils.loadSolutionPoints(startingSolutionFileName);
         } //otherwise, we simply use the parameter points list
+
         double currScore = Utils.scoreTree(mstAlgo.makeTree(points));
         double temp = STARTING_TEMP;
         long startTime = System.currentTimeMillis();
 
         double allTimeBestScore = currScore;
         ArrayList<Point> allTimeBestGraph = new ArrayList<>(points);
+
+        ShutdownHook currHook = new ShutdownHook(allTimeBestGraph);
+        Runtime.getRuntime().addShutdownHook(currHook);
 
         System.out.println("Starting Score = " + currScore);
 
@@ -52,6 +56,9 @@ public class SteinerSimAnneal implements Algorithm {
             if (currScore < allTimeBestScore) {
                 allTimeBestScore = currScore;
                 allTimeBestGraph = new ArrayList<>(points);
+                Runtime.getRuntime().removeShutdownHook(currHook);
+                currHook = new ShutdownHook(allTimeBestGraph);
+                Runtime.getRuntime().addShutdownHook(currHook);
             }
         }
 
