@@ -7,7 +7,7 @@ import java.io.IOException;
 public class Runner {
     public static String[] algorithms = {"In Input Order", "Greedy", "Simulated Annealing — Two Point Switch", "Prim"
                                         , "Simulated Annealing — Steiner Points"};
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         ArrayList<Point> points = Utils.getInput();
 
